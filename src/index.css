@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: 0 0% 98%;
+    --card: 0 100% 0%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 116 39% 24%;
+    --input: 116 39% 24%;
+    --ring: 240 4.9% 83.9%;
+    --radius: 0.75rem;
+    --light-violet: #7469b6;
+    font-family: "Kanit", sans-serif;
+    font-size: 12px;
+    line-height: 2rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffe6e6;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #e1afd1;
+  border-radius: 5px;
+
+  border: none;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ad88c6;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  background: var(--thumb-color, #7469b6);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  /* Hide the default appearance */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Define your custom appearance */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Custom styles for checked state */
+input[type="radio"]:checked {
+  background-color: #6b21a8; /* Change background color for checked state */
+  border-color: #ffe6e6; /* Change border color for checked state */
+}
+
+input {
+  outline: none;
+}
+
+.bridgeBuilderCheckbox:checked::after {
+  content: "\2713"; /* Unicode for check mark */
+  font-size: 16px; /* Size of the check mark */
+  color: purple; /* Color of the check mark */
+  position: absolute; /* Position it absolutely */
+  top: 50%; /* Align vertically */
+  left: 50%; /* Align horizontally */
+  transform: translate(-50%, -50%); /* Center it perfectly */
+  font-weight: 800;
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.formtabs-vertical {
+  display: flex;
+}
+
+.formtabs-vertical .formtabs-list {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  gap: 10px;
+}
+
+.formtabs-vertical .formtabs-content {
+  flex-grow: 1;
+  padding-left: 20px;
+}
+
+.formtabs-vertical .formtab-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  background-color: #7469b6;
+  color: #fff;
+  font-size: 1.2em;
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.formtabs-vertical .formtab-trigger[data-state="active"] {
+  background-color: #6b21a8;
+  color: #fff;
+}
+
+.formtabs-vertical .formtab-trigger:hover {
+  background-color: #6b21a8;
+  color: #fff;
+}
+
+.header {
+  font-size: 2em;
+  color: #6b21a8;
+}
+
