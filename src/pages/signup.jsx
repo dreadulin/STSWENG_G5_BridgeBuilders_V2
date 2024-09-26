@@ -11,7 +11,7 @@ export default function SignUp() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("Community");
+  const [userType, setUserType] = useState("community");
 
   const navigate = useNavigate(); 
 
