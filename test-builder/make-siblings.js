@@ -1,6 +1,6 @@
 import randomInteger from "random-int";
-import {Child} from "./make_children";
-import {chooseFromArray} from "./util";
+import {Child} from "./make_children.js";
+import {chooseFromArray} from "./util.js";
 
 class Sibling {
   constructor(idx) {
@@ -35,7 +35,8 @@ class Sibling {
  */
 export function assignSiblings(child) {
   const bilangNgKapatid = randomInteger(0, 4);
-  const lastName = child.pangalan(' ').at(-1);
+  const lastName = child.pangalan.split(' ').at(-1);
+  child.kapatid = [];
 
   let kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
 

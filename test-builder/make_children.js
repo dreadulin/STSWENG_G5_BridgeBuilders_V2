@@ -5,6 +5,8 @@ import {
   chooseManyFromArray 
 } from './util.js';
 
+import randomInteger from 'random-int';
+
 export class Kategorya {
   constructor() {
     this.pangalan = undefined;
@@ -141,21 +143,6 @@ export const problemList = [
   "Not studying",
 ];
 
-export function piliAntas(edad) {
-  let antas = antasList[0];
-
-  if (edad > 11) {
-    antas = antasList[2]; // High school
-  }
-  else if (edad > 4) {
-    antas = antasList[1]; // Elementary
-  }
-  else {
-    antas = antasList[0]; // None
-  }
-
-  return antas;
-}
 
 export function piliAntas(edad) {
   let antas = antasList[0];
@@ -173,18 +160,18 @@ export function piliAntas(edad) {
   return antas
 }
 
-export function makeChild(firstName, lastName) {
-  const child = new Child()
-
+export function makeChild(firstName, lastName, kasarian) {
+  const child = new Child();
+  const today = new Date();
   const fullName = firstName + lastName;
 
   child.program = programList.at(randomInteger(1)); 
-  child.date = Date.now();
+  child.date = today;
   // child.caseNo = ; //unique id
   child.pangalan = fullName;
   child.edad = randomInteger(1, 12);
   child.birthday = 
-    (today.getUTCFullYear() - edad).toString()
+    (today.getUTCFullYear() - child.edad).toString()
     + randomInteger(1, 12).toString()
     + randomInteger(1, 25); //petsa ng kapanganakan
 
@@ -198,7 +185,7 @@ export function makeChild(firstName, lastName) {
   ].at(randomInteger(5));
 
   child.antasNgPaaralan = piliAntas(child.edad);
-  child.palayaw = firstName.split()[0];
+  child.palayaw = firstName.split(' ')[0];
   child.kasarian = kasarian;
   child.lugarNgKapanganakan = randomStr();
   child.hulingPaaralangPinasukan = randomStr(); //huling paaralang pinasukan

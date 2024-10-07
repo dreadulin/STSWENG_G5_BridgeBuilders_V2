@@ -1,6 +1,6 @@
 import randomInteger from "random-int";
-import {antasList, Child} from "./make_children";
-import {chooseFromArray, randomListStr, randomStr, writeBirthdayStr} from "./util";
+import {antasList, Child} from "./make_children.js";
+import {chooseFromArray, randomListStr, randomStr, writeBirthdayStr} from "./util.js";
 import resultNames from './readFiles.js'
 
 export class Parent {
@@ -47,7 +47,7 @@ export class Parent {
  * */
 export function assignMother(child) {
   const parent_ = new Parent();
-  const lastName = child.split(' ').at(-1);
+  const lastName = child.pangalan.split(' ').at(-1);
   const kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
   let name = "";
 
@@ -76,7 +76,8 @@ export function assignMother(child) {
   parent_.antasNgPaaralan = antasList[chooseFromArray([0, 3, 4])];
   parent_.hulingPaaralangPinasukan = randomStr();
   parent_.tirahan = child.tirahan;
-  parent_.probinsya = chooseFromArray([randomStr(), probinsya]);
+  // parent_.probinsya = chooseFromArray([randomStr(), probinsya]);
+  parent_.probinsya = randomStr();
   parent_.trabaho = randomStr();
   parent_.kita = randomInteger(10000, 600000);
   parent_.skillTraining = randomStr();
@@ -88,7 +89,7 @@ export function assignMother(child) {
 
 export function assignFather(child) {
   const parent_ = new Parent();
-  const lastName = child.split(' ').at(-1);
+  const lastName = child.pangalan.split(' ').at(-1);
   const kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
   let name = "";
 
@@ -117,7 +118,7 @@ export function assignFather(child) {
   parent_.antasNgPaaralan = antasList[chooseFromArray([0, 3, 4])];
   parent_.hulingPaaralangPinasukan = randomStr();
   parent_.tirahan = child.tirahan;
-  parent_.probinsya = chooseFromArray([randomStr(), probinsya]);
+  parent_.probinsya = randomStr();
   parent_.trabaho = randomStr();
   parent_.kita = randomInteger(10000, 600000);
   parent_.skillTraining = randomStr();

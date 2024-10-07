@@ -5,10 +5,11 @@ import {
 } from './make_children.js';
 
 
-import {assignFather, assignMother, generateParent} from './make-parent.js';
+import {assignFather, assignMother} from './make-parent.js';
 import {chooseFromArray, makeFirstName} from './util.js';
+import { assignSiblings } from './make-siblings.js';
 
-
+/*
 function generateName(kasarian) {
   let first = "";
   let last = "";
@@ -37,6 +38,7 @@ function generateName(kasarian) {
 
   return {first, last};
 }
+*/
 
 // select how many children
 const childCount = 5;
@@ -45,12 +47,11 @@ const today = new Date();
 
 for (let i = 0; i < childCount; i++) {
   const kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
-  const nameKasarianMap = new Map();
-  nameKasarianMap.set("Lalaki", resultNames.takeMaleName);
-  const firstName = makeFirstName();
+
+  const firstName = makeFirstName(resultNames, kasarian);
   const lastName = resultNames.takeFamilyName();
 
-  const child = makeChild(firstName, lastName);
+  const child = makeChild(firstName, lastName, kasarian);
 
   assignFather(child);
   assignMother(child);
@@ -59,6 +60,7 @@ for (let i = 0; i < childCount; i++) {
   children.push(child);
 }
 
+console.log(children);
+console.log(children.length);
 // mongodb time
 
-//for (const crap  = ;

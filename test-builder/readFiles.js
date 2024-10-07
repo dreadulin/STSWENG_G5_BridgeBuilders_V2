@@ -1,27 +1,31 @@
 import {readFileSync} from 'node:fs';
-import {randomInteger} from 'random-int';
+import randomInteger from 'random-int';
 
 const resultNames = {
   maleNames: [],
   femaleNames: [],
   familyNames: [],
   takeMaleName: function (){
-    const idx = randomInteger(this.maleNames.length);
+    const idx = randomInteger(this.maleNames.length - 1);
     const name = this.maleNames[idx];
     // this.maleNames.splice(idx, 1);
 
     return name;
   },
   takeFemaleName: function (){
-    const idx = randomInteger(this.femaleNames.length);
+    const idx = randomInteger(this.femaleNames.length - 1);
     const name = this.femaleNames[idx];
     // this.femaleNames.splice(idx, 1);
 
     return name;
   },
   takeEitherName: function () {
-    
-  };
+    const idx = randomInteger(this.maleNames.length - 1);
+    const name = 
+      randomInteger(0, 1) == 1 ? this.maleNames[idx] : this.femaleNames[idx];
+
+    return name;
+  },
   takeFamilyName: function (){
     const idx = randomInteger(this.familyNames.length);
     const name = this.familyNames[idx];
@@ -39,8 +43,8 @@ const takeFirst = value => {
 
 const takeSecond = value => {
   const firstAndLast = value.split(' ');
-  const firstName = firstAndLast[1];
-  return firstName;
+  const secondName = firstAndLast[1];
+  return secondName;
 };
 
 try {
@@ -51,12 +55,10 @@ try {
   const femaleNamesData = femaleData.split('\n').filter(Boolean);
 
   const maleFirstNames = maleNamesData.map(takeFirst);
-
   const femaleFirstNames = femaleNamesData.map(takeFirst);
-
   const lastNames = maleNamesData.map(takeSecond);
 
-  lastNames.push(...femaleNames.map(takeSecond));
+  lastNames.push(...femaleNamesData.map(takeSecond));
 
   resultNames.maleNames.push(...maleFirstNames);
   resultNames.femaleNames.push(...femaleFirstNames);

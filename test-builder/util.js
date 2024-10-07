@@ -39,8 +39,9 @@ export function chooseManyFromArray(array, length) {
  * @returns {Date}
  * */
 export function writeBirthday(age) {
+  const today = new Date();
   return new Date(
-    Date.now().getFullYear() - age,
+    today.getFullYear() - age,
     randomInteger(1, 12),
     randomInteger(1, 31)
   );
@@ -72,11 +73,25 @@ export function writeBirthdayStr(age) {
  *
  * @param {takeName} takeName
  */
-export function makeFirstName(takeName) {
+export function makeFirstName(resultNames, kasarian) {
   let name = "";
+  let chosenName = "";
 
-  for (let i = 0; i < randomInteger(1, 3); i++)
-    name += takeName();
+  for (let i = 0; i < randomInteger(1, 3); i++) {
+
+    switch (kasarian) {
+      case "Lalaki":
+        chosenName = resultNames.takeMaleName();
+        break;
+      case "Babae":
+        chosenName = resultNames.takeFemaleName();
+        break;
+      case "Other":
+        chosenName = resultNames.takeEitherName();
+        break;
+    }
+    name += chosenName + ' ';
+  }
 
   return name;
 }
