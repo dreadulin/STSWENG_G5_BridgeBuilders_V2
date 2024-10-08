@@ -1,14 +1,17 @@
 import Appbar from "@/components/ui/Appbar";
 import Goal from "@/components/ui/Goal";
 import Tooltip from "@/components/ui/Tooltip";
+import { AttachFileModal } from "@/components/custom/AttachFileModal";
 import useProfile from "@/utils/hooks/useProfile";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import axios from "../axiosInstance.js";
 
 const Profile = () => {
 
   const { caseNo } = useParams();
   const { profileData } = useProfile(caseNo);
+  const [isAttachModalOpen, setIsAttachModalOpen] = useState(false);
 
   const handleArchiveClick = async () => {
     console.log("handling archive");
@@ -27,6 +30,11 @@ const Profile = () => {
       console.log("Archive cancelled");
     }
   };
+
+  const handleAttachFile = () =>{
+    //TODO: Implement File upload to database
+  };
+
 
   return (
     <>
@@ -160,10 +168,23 @@ const Profile = () => {
             <div className="flex items-center mt-8">
               <h1 className="text-4xl mr-4">More Information</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
+              <Tooltip tooltipText={"Attach File"} className="mr-6 ml-6">
+                <span className="material-symbols-outlined md:text-5xl select-none cursor-pointer"
+                      onClick={()=>setIsAttachModalOpen(true)}>
+                  add_circle
+                </span>
+              </Tooltip>
             </div>
           </div>
         </div>
       </div>
+
+      <AttachFileModal
+        isOpen={isAttachModalOpen}
+        onClose={() => setIsAttachModalOpen(false)}
+        onConfirm={handleAttachFile}
+        message={`Attach a File:`}
+      />
     </>
   );
 };
