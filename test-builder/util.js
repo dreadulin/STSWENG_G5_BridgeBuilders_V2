@@ -95,3 +95,10 @@ export function makeFirstName(resultNames, kasarian) {
 
   return name;
 }
+
+export async function outputDocuments(cursor) {
+  console.log("Childrens: ");
+  for await (const item of cursor) {
+    console.log(item);
+  } 
+}

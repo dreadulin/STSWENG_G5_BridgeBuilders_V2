@@ -1,49 +1,19 @@
 import resultNames from './readFiles.js'
-import randomInteger from 'random-int';
-import { 
-  makeChild,
-} from './make_children.js';
+import { makeChild } from './make_children.js';
 
-
-import {assignFather, assignMother} from './make-parent.js';
-import {chooseFromArray, makeFirstName} from './util.js';
+import { assignFather, assignMother } from './make-parent.js';
+import { chooseFromArray, makeFirstName, outputDocuments } from './util.js';
 import { assignSiblings } from './make-siblings.js';
 
-/*
-function generateName(kasarian) {
-  let first = "";
-  let last = "";
-  
-  if (kasarian == "Lalaki") {
-    for (let i = 0; i < randomInteger(1, 2); i++)
-      first += resultNames.takeMaleName();
-  }
-  if (kasarian == "Babae") {
-    for (let i = 0; i < randomInteger(1, 2); i++)
-      first += resultNames.takeFemaleName();
-  }
-  if (kasarian == "Other") {
-    switch (randomInteger(1)) {
-      case 0:
-        for (let i = 0; i < randomInteger(1, 2); i++)
-          first += resultNames.takeMaleName();
-        break;
-      case 1: 
-        for (let i = 0; i < randomInteger(1, 2); i++)
-          first += resultNames.takeFemaleName();
-        break;
-    }
-  }
-
-
-  return {first, last};
-}
-*/
+import mongoPkg from 'mongodb';
+import dotenv from 'dotenv';
+const { MongoClient, ServerApiVersion } = mongoPkg;
 
 // select how many children
 const childCount = 5;
 const children = [];
-const today = new Date();
+const parents = [];
+const siblings = [];
 
 for (let i = 0; i < childCount; i++) {
   const kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
@@ -53,14 +23,43 @@ for (let i = 0; i < childCount; i++) {
 
   const child = makeChild(firstName, lastName, kasarian);
 
-  assignFather(child);
-  assignMother(child);
-  assignSiblings(child, children);
+  parents.push(assignFather(child));
+  parents.push(assignMother(child));
+
+  const siblingArray = assignSiblings(child, children);
+  siblingArray.map(value => {
+    siblings.push(value);
+  });
 
   children.push(child);
 }
 
-console.log(children);
-console.log(children.length);
+dotenv.config();
+
 // mongodb time
+const mongodb = new MongoClient(process.env.MONGODB_URI,{
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+const localDb = mongodb.db("populated-data");
+const childCollection = localDb.collection("children");
+const parentCollection = localDb.collection("parents");
+const siblingCollection = localDb.collection("siblings");
+
+try {
+  await childCollection.insertMany(children);
+  await parentCollection.insertMany(parents);
+  await siblingCollection.insertMany(siblings);
+
+  const cursorChildren = childCollection.find();
+  const cursorParents = parentCollection.find();
+  const cursorSiblings = siblingCollection.find();
+} catch (e) {
+  console.error(e);
+}
+
 

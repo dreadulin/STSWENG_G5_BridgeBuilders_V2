@@ -84,7 +84,8 @@ export function assignMother(child) {
   parent_.skills = randomStr();
   parent_.dokumento = randomListStr();
 
-  child.nanay = parent_;
+  child.nanay = parent_.pangalan;
+  return parent_;
 }
 
 export function assignFather(child) {
@@ -125,5 +126,6 @@ export function assignFather(child) {
   parent_.skills = randomStr();
   parent_.dokumento = randomListStr();
 
-  child.tatay = parent_;
+  child.tatay = parent_.pangalan;
+  return parent_;
 }
