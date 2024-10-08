@@ -29,6 +29,15 @@ per child is randomized.
 ```
 
 ## How to run
+*test-builder* is its own NodeJS app, so you need to install
+its packages first
+
+```
+npm install
+```
+
+Then run the command below:
+
 ```
 npm run build
 ```
