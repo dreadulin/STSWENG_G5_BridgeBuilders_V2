@@ -1,4 +1,13 @@
 # Data Builder
+## IMPORTANT
+You need to make your own .env file **inside** test-builder,
+not in the root directory (STSWENG_G5_BridgeBuilders_V2).
+
+```
+// .env
+
+MONGODB_URI=<your mongodb uri here>
+```
 
 ## Change the number of children
 You can change the number of children to be generated.
@@ -23,3 +32,4 @@ per child is randomized.
 ```
 npm run build
 ```
+Once you run this command, the code automatically inserts data
