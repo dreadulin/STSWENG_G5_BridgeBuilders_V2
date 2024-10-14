@@ -180,6 +180,7 @@ const Profile = () => {
       </div>
 
       <AttachFileModal
+        title={"Attach a File"}
         isOpen={isAttachModalOpen}
         onClose={() => setIsAttachModalOpen(false)}
         onConfirm={handleAttachFile}
