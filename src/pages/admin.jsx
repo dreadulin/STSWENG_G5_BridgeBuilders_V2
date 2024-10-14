@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Appbar from "@/components/ui/Appbar";
 import { Button } from "@/components/ui/button";
+import { AttachFileModal } from "@/components/custom/AttachFileModal";
 import { PasswordModal } from "@/components/custom/PasswordModal";
 
 const userTypeMapping = {
@@ -12,6 +13,7 @@ const userTypeMapping = {
 
 const Admin = () => {
   const [accounts, setAccounts] = useState([]);
+  const [isAttachModalOpen, setIsAttachModalOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [successMessage, setSuccessMessage] = useState(""); 
@@ -80,19 +82,29 @@ const Admin = () => {
     }
   }, [successMessage]);
 
+  const handleNewBackground = async () =>{
+    // TO-DO: implement function
+  }
+
   return (
     <>
       <Appbar />
 
       <div className="bg-white p-6 rounded-lg w-full">
         <h1 className="text-2xl font-bold text-bb-violet mb-4">Admin Dashboard</h1>
-        <Button
-        className="bg-bb-violet text-white px-6 py-3 text-lg font-bold"
-        >
-        <a href="/signup" className="text-white no-underline">
-            Signup account
-        </a>
-        </Button>
+        <div className="flex flex-row space-x-4">
+          <Button className="bg-bb-violet text-white px-6 py-3 text-lg font-bold">
+            <a href="/signup" className="text-white no-underline">
+              Signup account
+            </a>
+          </Button>
+          <Button 
+            className="bg-bb-violet text-white px-6 py-3 text-lg font-bold"
+              onClick={()=>setIsAttachModalOpen(true)}>
+              Change Login Background
+          </Button>
+        </div>
+        
       <hr className="my-4 border-t-2 border-bb-violet" />
         <table className="min-w-full bg-white rounded-lg">
           <thead>
@@ -134,6 +146,14 @@ const Admin = () => {
         onClose={() => setIsResetModalOpen(false)}
         onConfirm={handlePasswordChange}
         currentUsername={selectedAccount?.username}
+      />
+
+      <AttachFileModal
+        title={"Change Login Background"}
+        isOpen={isAttachModalOpen}
+        onClose={() => setIsAttachModalOpen(false)}
+        onConfirm={handleNewBackground}
+        message={`Attach a File:`}
       />
     </>
   );
