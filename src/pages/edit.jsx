@@ -463,8 +463,7 @@ const Edit = () => {
             <div className="flex items-center mt-8">
               <h1 className="text-4xl mr-4">Intake Form</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
-            </div><div className="mt-4 space-y-4">
-              <PangunahingImpormasyon childData={childData} setChildData={setChildData} />
+              </div><div className="mt-4 space-y-4">
               <PamilyaProblema childData={childData} setChildData={setChildData} />
               <Nanay childData={childData} setChildData={setChildData} />
               <Tatay childData={childData} setChildData={setChildData} />
