@@ -305,7 +305,7 @@ const Edit = () => {
                 </button>
               </Tooltip>
               <Tooltip tooltipText={"Return"} className=" mr-6 ml-2 ">
-                <a href={`/profile/${profileData.caseNo}`}>
+                <a href={`/profile/${caseNo}`}>
                   <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer">
                     keyboard_return
                   </span>
@@ -377,6 +377,8 @@ const Edit = () => {
               <h1 className="text-4xl mr-4">More Information</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
             </div>
+
+
           </div>
         </div>
       </div>
