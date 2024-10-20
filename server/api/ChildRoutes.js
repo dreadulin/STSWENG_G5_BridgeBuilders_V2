@@ -52,7 +52,6 @@ apiRouter.post(
         profileData.goalsAchieved = profileData.goalsAchieved.split(",");
       }
       await editChildSchema.validate(profileData, { abortEarly: false });
-      await editParentSchema.validate(profileData, { abortEarly: false });
 
       if (req.file) {
         profileData.picture = await imageUploader(req.file);
