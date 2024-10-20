@@ -16,6 +16,7 @@ import axios from "../axiosInstance.js";
 import Status from "@/components/ui/Status.jsx";
 import FormError from "@/components/ui/FormError.jsx";
 import { editChildSchema } from "../../schemas/FormValidationSchema.js";
+import { editParentSchema } from "../../schemas/FormValidationSchema.js";
 import * as Yup from "yup";
 
 const programOptions = [
@@ -106,7 +107,7 @@ const Edit = () => {
   const pictureRef = useRef(null);
   const { caseNo } = useParams();
   //const { profileData, setProfileData } = useProfile("Darryl Javier");
-  const { profileData, setProfileData, error, loading } = useProfile(caseNo);
+  const {profileData, setProfileData, error, loading } = useProfile(caseNo);
   const [childData, setChildData] = useState(initialUser);
   const [image, setImage] = useState(profileData.picture);
   const [formError, setFormError] = useState({ open: false, errors: [] });
@@ -471,6 +472,10 @@ const Edit = () => {
               <Dokumento childData={childData} setChildData={setChildData} />
               <IbangImpormasyon childData={childData} setChildData={setChildData} />
             </div>
+
+            
+
+            
 
           </div>
         </div>
