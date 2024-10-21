@@ -1,8 +1,11 @@
 import {
   childSchemaServer,
   editChildSchema,
+  editParentSchema,
 } from "../../schemas/FormValidationSchema.js";
 import Child from "../../schemas/ChildSchema.js";
+import Father from "../../schemas/FatherSchema.js";
+import Mother from "../../schemas/MotherSchema.js";
 import express from "express";
 import * as Yup from "yup";
 import imageUploader from "../../src/utils/imageUploader.js";
@@ -12,10 +15,22 @@ const apiRouter = express.Router();
 
 //profile page
 apiRouter.get("/profile/:caseNo", async (req, res) => {
-  var vals;
+  var kid;
+  var nanay;
+  var tatay;
   try {
-    vals = await Child.findById(req.params.caseNo);
-    res.status(200).json(vals);
+    kid = await Child.findById(req.params.caseNo);
+    console.log(kid.pangalan)
+
+    nanay = await Mother.findOne({ pangalan: kid.nanay });
+    console.log(nanay.pangalan)
+
+    tatay = await Father.findOne({ pangalan: kid.tatay });
+    console.log(nanay.pangalan)
+    
+    
+
+    res.status(200).json(kid);
   } catch (error) {
     res.status(500).send("Error fetching children data");
   }
@@ -37,6 +52,7 @@ apiRouter.post(
         profileData.goalsAchieved = profileData.goalsAchieved.split(",");
       }
       await editChildSchema.validate(profileData, { abortEarly: false });
+      await editParentSchema.validate(profileData, { abortEarly: false });
 
       if (req.file) {
         profileData.picture = await imageUploader(req.file);
