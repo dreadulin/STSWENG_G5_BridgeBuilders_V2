@@ -200,7 +200,7 @@ const Profile = () => {
               <div className="flex-grow h-1 mt-4 bg-bb-violet"></div>
 
               <h3 className="mt-2">
-                <strong>Case number:</strong> ${caseNo}
+                <strong>Case number:</strong> {caseNo}
               </h3>
 
               <div className="flex-grow h-1 mt-4 mb-4 bg-bb-violet"></div>
