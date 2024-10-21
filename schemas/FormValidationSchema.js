@@ -305,6 +305,52 @@ export const editChildSchema = Yup.object().shape({
   goalsAchieved: Yup.array().of(Yup.string()),
 });
 
+export const editParentSchema = Yup.object().shape({
+  pangalan: Yup.string()
+    .required("Pangunahing Impormasyon - Pangalan is required.")
+    .max(500, "Pangunahing Impormasyon - Pangalan must be 500 characters or less."),
+  palayaw: Yup.string()
+    .required("Pangunahing Impormasyon - Palayaw is required.")
+    .max(500, "Pangunahing Impormasyon - Palayaw must be 500 characters or less."),
+  kasarian: Yup.string()
+    .required("Pangunahing Impormasyon - Kasarian is required.")
+    .oneOf(["Male", "Female"], "Pangunahing Impormasyon - Kasarian must be either Male or Female.")
+    .max(500, "Pangunahing Impormasyon - Kasarian must be 500 characters or less."),
+  edad: Yup.number()
+    .required("Pangunahing Impormasyon - Edad is required.")
+    .positive("Pangunahing Impormasyon - Edad must be a positive number.")
+    .integer("Pangunahing Impormasyon - Edad must be a whole number."),
+  birthday: Yup.string()
+    .required("Pangunahing Impormasyon - Birthday is required."),
+  lugarNgKapanganakan: Yup.string()
+    .required("Pangunahing Impormasyon - Lugar ng Kapanganakan is required.")
+    .max(500, "Pangunahing Impormasyon - Lugar ng Kapanganakan must be 500 characters or less."),
+  relihiyon: Yup.string()
+    .required("Pangunahing Impormasyon - Relihiyon is required.")
+    .max(500, "Pangunahing Impormasyon - Relihiyon must be 500 characters or less."),
+  antasNgPaaralan: Yup.string()
+    .required("Pangunahing Impormasyon - Antas ng Paaralan is required.")
+    .max(500, "Pangunahing Impormasyon - Antas ng Paaralan must be 500 characters or less."),
+  hulingPaaralangPinasukan: Yup.string()
+    .required("Pangunahing Impormasyon - Huling Paaralang Pinasukan is required.")
+    .max(500, "Pangunahing Impormasyon - Huling Paaralang Pinasukan must be 500 characters or less."),
+  tirahan: Yup.string()
+    .required("Pangunahing Impormasyon - Tirahan is required.")
+    .max(500, "Pangunahing Impormasyon - Tirahan must be 500 characters or less."),
+  probinsya: Yup.string()
+    .max(500, "Pangunahing Impormasyon - Probinsya must be 500 characters or less."),
+  trabaho: Yup.string()
+    .max(500, "Pangunahing Impormasyon - Trabaho must be 500 characters or less."),
+  kita: Yup.number()
+    .positive("Pangunahing Impormasyon - Kita must be a positive number.")
+    .integer("Pangunahing Impormasyon - Kita must be a whole number."),
+  skillTraining: Yup.string()
+    .max(500, "Pangunahing Impormasyon - Skill Training must be 500 characters or less."),
+  skills: Yup.string()
+    .max(500, "Pangunahing Impormasyon - Skills must be 500 characters or less."),
+  dokumento: Yup.array().of(Yup.string().max(500, "Pangunahing Impormasyon - Dokumento must be 500 characters or less."))
+});
+
 export const familySchemaServer = Yup.object().shape({
   bata: Yup.string()
     .required("Pangalan ng bata is required.")
