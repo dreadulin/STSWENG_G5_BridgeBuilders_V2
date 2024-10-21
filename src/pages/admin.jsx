@@ -82,10 +82,26 @@ const Admin = () => {
     }
   }, [successMessage]);
 
-  const handleNewBackground = async () =>{
-    // TO-DO: implement function
-  }
-
+  const handleNewBackground = async (file) => {
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("backgroundImage", file);
+  
+    try {
+      const response = await axios.post('http://localhost:3002/api/upload-background', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Background updated:', response.data);
+      alert('Background image updated successfully!');
+    } catch (error) {
+      console.error('Error uploading background image:', error);
+      alert('Failed to update background image. Please try again.');
+    }
+  };
+    
   return (
     <>
       <Appbar />
