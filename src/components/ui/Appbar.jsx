@@ -40,7 +40,7 @@ const Appbar = () => {
     <>
       <div className="flex align-center w-full h-28 bg-bb-white p-4 sticky top-0 z-10">
         <div className="h-full w-28 md:w-48">
-          <a href="/">
+          <a href="/overview">
             <img
               src="/src/assets/logo2.png"
               className="object-fill cursor-pointer"
