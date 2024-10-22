@@ -1,4 +1,11 @@
 import Appbar from "@/components/ui/Appbar";
+import PangunahingImpormasyon from "@/components/intakeForm/Form1";
+import PamilyaProblema from "@/components/intakeForm/Form2";
+import Nanay from "@/components/intakeForm/Form3";
+import Tatay from "@/components/intakeForm/Form4";
+import Kapatid from "@/components/intakeForm/Form5";
+import Dokumento from "@/components/intakeForm/Form6";
+import IbangImpormasyon from "@/components/intakeForm/Form7";
 import Select from "@/components/ui/Select";
 import Goal from "@/components/ui/Goal";
 import Tooltip from "@/components/ui/Tooltip";
@@ -9,6 +16,7 @@ import axios from "../axiosInstance.js";
 import Status from "@/components/ui/Status.jsx";
 import FormError from "@/components/ui/FormError.jsx";
 import { editChildSchema } from "../../schemas/FormValidationSchema.js";
+import { editParentSchema } from "../../schemas/FormValidationSchema.js";
 import * as Yup from "yup";
 
 const programOptions = [
@@ -16,11 +24,91 @@ const programOptions = [
   { value: "Home Care", name: "program" },
 ];
 
+// Placeholder value for edit
+const initialUser = {
+  pangalan: "",
+  program: "Home Care",
+  palayaw: "",
+  edad: null,
+  kasarian: "",
+  birthday: "",
+  relihiyon: "",
+  antasNgPaaralan: "None",
+  lugarNgKapanganakan: "",
+  problema: [],
+  hulingPaaralangPinasukan: "",
+  tirahan: "",
+  allergy: [],
+  vaccine: [],
+  kategorya: {
+    pangalan: "",
+    ngo: "",
+    lgu: "",
+  },
+  initialNaItsura: [],
+  nanay: {
+    pangalan: "",
+    palayaw: "",
+    kasarian: "",
+    edad: null,
+    birthday: "",
+    lugarNgKapanganakan: "",
+    relihiyon: "",
+    antasNgPaaralan: "None",
+    hulingPaaralangPinasukan: "",
+    tirahan: "",
+    probinsya: "",
+    trabaho: "",
+    kita: null,
+    skillTraining: "",
+    skills: "",
+    dokumento: [],
+  },
+  tatay: {
+    pangalan: "",
+    palayaw: "",
+    kasarian: "",
+    edad: null,
+    birthday: "",
+    lugarNgKapanganakan: "",
+    relihiyon: "",
+    antasNgPaaralan: "None",
+    hulingPaaralangPinasukan: "",
+    tirahan: "",
+    probinsya: "",
+    trabaho: "",
+    kita: null,
+    skillTraining: "",
+    skills: "",
+    dokumento: [],
+  },
+  kapatid: [],
+  dokumento: [],
+  ilanNagaaral: null,
+  ilanBaon: null,
+  saanGastosBaon: "",
+  schoolActivity: [],
+  sakit: [],
+  familyPlanningMethod: "",
+  saanTubig: "",
+  saanLaba: "",
+  saanCR: "",
+  ilanKain: null,
+  ilanLigo: null,
+  ipon: false,
+  utang: false,
+  dswd: false,
+  kainPasok: false,
+  alsAttend: false,
+  checkup: false,
+};
+
 const Edit = () => {
   const pictureRef = useRef(null);
   const { caseNo } = useParams();
   //const { profileData, setProfileData } = useProfile("Darryl Javier");
-  const { profileData, setProfileData, error, loading } = useProfile(caseNo);
+  const {profileData, setProfileData, error, loading } = useProfile(caseNo);
+  const [childData, setChildData] = useState(initialUser);
   const [image, setImage] = useState(profileData.picture);
   const [formError, setFormError] = useState({ open: false, errors: [] });
   const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -305,7 +393,7 @@ const Edit = () => {
                 </button>
               </Tooltip>
               <Tooltip tooltipText={"Return"} className=" mr-6 ml-2 ">
-                <a href={`/profile/${profileData.caseNo}`}>
+                <a href={`/profile/${caseNo}`}>
                   <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer">
                     keyboard_return
                   </span>
@@ -335,7 +423,7 @@ const Edit = () => {
               <div className="flex-grow h-1 bg-bb-violet"></div>
             </div>
 
-            <div className="flex w-full overflow-auto">
+            <div className="flex w-full">
               <div className="flex flex-col">
                 <Goal
                   name="goal1"
@@ -374,9 +462,21 @@ const Edit = () => {
             </div>
 
             <div className="flex items-center mt-8">
-              <h1 className="text-4xl mr-4">More Information</h1>
+              <h1 className="text-4xl mr-4">Intake Form</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
+              </div><div className="mt-4 space-y-4">
+              <PamilyaProblema childData={childData} setChildData={setChildData} />
+              <Nanay childData={childData} setChildData={setChildData} />
+              <Tatay childData={childData} setChildData={setChildData} />
+              <Kapatid childData={childData} setChildData={setChildData} />
+              <Dokumento childData={childData} setChildData={setChildData} />
+              <IbangImpormasyon childData={childData} setChildData={setChildData} />
             </div>
+
+            
+
+            
+
           </div>
         </div>
       </div>
