@@ -133,10 +133,10 @@ const Forms = () => {
     setError({ ...error, open: false });
   };
 
-  // Creating parents
-  const handleSubmitParentInformation = async () => {
+  // Creating mother
+  const handleSubmitMotherInformation = async () => {
     try {
-      await axios.post("/api/intakeParent", {
+      await axios.post("/api/intakeMother", {
         pangalan: childData.nanay.pangalan,
         palayaw: childData.nanay.palayaw,
         kasarian: childData.nanay.kasarian,
@@ -154,8 +154,36 @@ const Forms = () => {
         skills: childData.nanay.skills,
         dokumento: childData.nanay.dokumento,
       });
+      return true;
+    } catch (error) {
+      if (error.response) {
+        handleStatusOpen(
+          `Error adding parent: ${
+            error.response.data.error || error.response.data.message
+          }`,
+          "error"
+        );
+      } else if (error.request) {
+        handleStatusOpen(
+          "Error adding parent: No response from server",
+          "error"
+        );
+      } else {
+        handleStatusOpen(`Error adding parent: ${error.message}`, "error");
+      }
 
-      await axios.post("/api/intakeParent", {
+      setTimeout(() => {
+        handleStatusClose();
+      }, 1000);
+
+      return false;
+    }
+  };
+
+  // Creating Father
+  const handleSubmitFatherInformation = async () => {
+    try {
+      await axios.post("/api/intakeFather", {
         pangalan: childData.tatay.pangalan,
         palayaw: childData.tatay.palayaw,
         kasarian: childData.tatay.kasarian,
@@ -357,12 +385,14 @@ const Forms = () => {
       .validate(childData, { abortEarly: false })
       .then(() => {
         const submitChildSuccess = handleSubmitChildInformation();
-        const submitParentSuccess = handleSubmitParentInformation();
+        const submitMotherSuccess = handleSubmitMotherInformation();
+        const submitFatherSuccess = handleSubmitFatherInformation();
         const submitKapatiduccess = handleSubmitKapatidInformation();
         const submitFamilyInfoSuccess = handleSubmitFamilyInformation();
         if (
           submitChildSuccess &&
-          submitParentSuccess &&
+          submitMotherSuccess &&
+          submitFatherSuccess &&
           submitKapatiduccess &&
           submitFamilyInfoSuccess
         ) {
