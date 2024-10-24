@@ -26,10 +26,8 @@ apiRouter.get("/profile/:caseNo", async (req, res) => {
     console.log(nanay.pangalan)
 
     tatay = await Father.findOne({ pangalan: kid.tatay });
-    console.log(nanay.pangalan)
+    console.log(tatay.pangalan)
     
-    
-
     res.status(200).json(kid);
   } catch (error) {
     res.status(500).send("Error fetching children data");
