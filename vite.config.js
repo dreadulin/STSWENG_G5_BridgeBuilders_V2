@@ -5,22 +5,11 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3001,
+    port: 3001, // Set the server port
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"), // Shortcut for imports
-    },
-  },
-  optimizeDeps: {
-    include: ["jspdf"], // Ensure jspdf is bundled properly
-  },
-  build: {
-    rollupOptions: {
-      external: ["jspdf"], // Mark jspdf as external
-    },
-    commonjsOptions: {
-      include: [/node_modules/], // Ensure commonjs packages like jspdf are processed
     },
   },
 });
