@@ -13,11 +13,14 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ["jspdf"], // Ensure Vite pre-bundles jspdf if needed
+    include: ["jspdf"], // Ensure jspdf is bundled properly
   },
   build: {
     rollupOptions: {
-      external: [], // Remove jspdf from external unless you're deliberately excluding it
+      external: [], // Leave this empty unless you really want to exclude certain packages
+    },
+    commonjsOptions: {
+      include: [/node_modules/], // Ensure commonjs packages like jspdf are processed
     },
   },
 });
