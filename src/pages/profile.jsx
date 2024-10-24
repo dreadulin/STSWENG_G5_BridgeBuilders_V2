@@ -60,10 +60,6 @@ const Profile = () => {
         // Add profile picture
         doc.addImage(profileImage, 'JPEG', margin, profileImageYPosition, 70, 70);
 
-        // Load and add the company logo
-        const companyLogoImage = new Image(); // Renamed for clarity
-        companyLogoImage.src = logo2; // Ensure logo2 is defined
-
         companyLogoImage.onload = () => {
             // Calculate position for the logo at the bottom right
             const logoX = doc.internal.pageSize.width - logoSize - margin; // Position on the right
@@ -113,13 +109,6 @@ const Profile = () => {
             doc.save(`${profileData.pangalan}(BridgeBuilders).pdf`);
         };
 
-        // Handle logo image load error
-        companyLogoImage.onerror = () => {
-            console.error("Company logo failed to load.");
-        };
-
-        // Trigger logo image loading
-        companyLogoImage.src = "/assets/logo.png"; 
     };
 
     // Handle profile picture load error
