@@ -17,6 +17,7 @@ import Status from "@/components/ui/Status.jsx";
 import FormError from "@/components/ui/FormError.jsx";
 import { editChildSchema } from "../../schemas/FormValidationSchema.js";
 import { editParentSchema } from "../../schemas/FormValidationSchema.js";
+import logo2 from "@/assets/logo2.png";
 import * as Yup from "yup";
 
 const programOptions = [
@@ -430,7 +431,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
-                  image={"/src/assets/logo.png"}
+                  image={logo2}
                   title="Mental"
                   goal={1}
                 />
@@ -442,7 +443,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
-                  image={"/src/assets/logo.png"}
+                  image={logo2}
                   title="Physical/Social"
                   goal={2}
                 />
@@ -454,7 +455,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
-                  image={"/src/assets/logo.png"}
+                  image={logo2}
                   title="Support to Caregiver"
                   goal={3}
                 />
@@ -472,10 +473,6 @@ const Edit = () => {
               <Dokumento childData={childData} setChildData={setChildData} />
               <IbangImpormasyon childData={childData} setChildData={setChildData} />
             </div>
-
-            
-
-            
 
           </div>
         </div>
