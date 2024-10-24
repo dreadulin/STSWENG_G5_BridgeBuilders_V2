@@ -4,6 +4,7 @@ import Tooltip from "@/components/ui/Tooltip";
 import useProfile from "@/utils/hooks/useProfile";
 import { useParams } from "react-router-dom";
 import axios from "../axiosInstance.js";
+import logo2 from "@/assets/logo2.png";
 import { jsPDF } from "jspdf";
 
 const Profile = () => {
@@ -249,21 +250,21 @@ const Profile = () => {
               <Goal
                 name="goal1"
                 goalsAchieved={profileData.goalsAchieved}
-                image={"/src/assets/logo.png"}
+                image={logo2}
                 title="Mental"
                 goal={1}
               />
               <Goal
                 name="goal2"
                 goalsAchieved={profileData.goalsAchieved}
-                image={"/src/assets/logo.png"}
+                image={logo2}
                 title="Physical/Social"
                 goal={2}
               />
               <Goal
                 name="goal3"
                 goalsAchieved={profileData.goalsAchieved}
-                image={"/src/assets/logo.png"}
+                image={logo2}
                 title="Support to Caregiver"
                 goal={3}
               />

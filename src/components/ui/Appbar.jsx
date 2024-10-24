@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Tooltip from "./Tooltip";
+import logo2 from "@/assets/logo2.png";
 
 const Appbar = () => {
   const [userType, setUserType] = useState(null);
@@ -42,7 +43,7 @@ const Appbar = () => {
         <div className="h-full w-28 md:w-48">
           <a href="/overview">
             <img
-              src="/src/assets/logo2.png"
+              src={logo2}
               className="object-fill cursor-pointer"
             />
           </a>
