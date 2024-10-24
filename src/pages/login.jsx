@@ -1,11 +1,11 @@
 import axios from '../axiosInstance.js'; 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
-import bg from "@/assets/bb-bg-blurred.png";
+import defaultBg from "@/assets/bb-bg-blurred.png";
 import { Notification } from '@/components/ui/Notification';
 
 export default function Login() {
@@ -14,6 +14,21 @@ export default function Login() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
   const navigate = useNavigate();
+  const [backgroundImage, setBackgroundImage] = useState(defaultBg);
+
+  useEffect(() => {
+    const fetchBackgroundImage = async () => {
+      try {
+        const response = await axios.get('/api/get-background');
+        setBackgroundImage(response.data.backgroundImage || defaultBg); 
+      } catch (error) {
+        console.error('Error fetching background image:', error);
+        setBackgroundImage(defaultBg);
+      }
+    };
+
+    fetchBackgroundImage();
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -58,7 +73,7 @@ export default function Login() {
   return (
     <div className="relative flex justify-center min-h-screen bg-gray-100 dark:bg-gray-950">
       <img
-        src={bg}
+        src={backgroundImage}
         alt="BridgeBuilder bg"
         className="absolute top-0 left-0 w-full h-full object-cover"
       />

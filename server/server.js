@@ -12,6 +12,7 @@ import fatherRoutes from "./api/FatherRoutes.js";
 import parentRoutes from "./api/ParentRoutes.js";
 import kapatidRoutes from "./api/SiblingRoutes.js";
 import familyRoutes from "./api/FamilyRoutes.js";
+import backgroundRoutes from "./api/BackgroundRoutes.js"
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use("/api", parentRoutes);
 app.use("/api", kapatidRoutes);
 app.use("/api", familyRoutes);
 app.use("/api", statsRoutes);
+app.use("/api", backgroundRoutes);
 
 // Serve React frontend for all non-API routes (catch-all)
 app.get("*", (req, res) => {
