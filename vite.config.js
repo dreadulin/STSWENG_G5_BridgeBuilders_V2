@@ -17,7 +17,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: [], // Leave this empty unless you really want to exclude certain packages
+      external: ["jspdf"], // Mark jspdf as external
     },
     commonjsOptions: {
       include: [/node_modules/], // Ensure commonjs packages like jspdf are processed
