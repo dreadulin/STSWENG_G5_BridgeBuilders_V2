@@ -6,6 +6,7 @@ import useProfile from "@/utils/hooks/useProfile";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "../axiosInstance.js";
+import logo2 from "@/assets/logo2.png";
 import { jsPDF } from "jspdf";
 
 const Profile = () => {
@@ -40,7 +41,6 @@ const Profile = () => {
 
   const handleDownloadClick = async () => {
     const doc = new jsPDF();
-
     const margin = 14;
     const lineHeight = 15;
     const titleYPosition = 22;
@@ -61,26 +61,13 @@ const Profile = () => {
     doc.text("Profile Information", (doc.internal.pageSize.width - titleWidth) / 2, titleYPosition);
 
     // Add the profile picture
-    const imgUrl = profileData.picture ?? "/src/assets/logo.png";
-    const img = new Image();
-    img.src = imgUrl;
+    const profilePictureUrl = profileData.picture ?? "/assets/logo.png"; // Renamed for clarity
+    const profileImage = new Image();
+    profileImage.src = profilePictureUrl;
 
-    // Wait for the image to load
-    img.onload = () => {
+    profileImage.onload = () => {
         // Add profile picture
-        doc.addImage(img, 'JPEG', margin, profileImageYPosition, 70, 70); // Adjust size and position as needed
-
-        // Load and add the company logo
-        const logoImg = new Image();
-        logoImg.src = "/src/assets/logo.png"; // Company logo path
-
-        logoImg.onload = () => {
-            // Calculate position for the logo at the bottom right
-            const logoX = doc.internal.pageSize.width - logoSize - margin; // Position on the right
-            const logoY = doc.internal.pageSize.height - logoSize - margin - logoOffset; // Position a bit lower at the bottom
-
-            // Add company logo
-            doc.addImage(logoImg, 'PNG', logoX, logoY, logoSize, logoSize);
+        doc.addImage(profileImage, 'JPEG', margin, profileImageYPosition, 70, 70);
 
             // Draw a line below the title
             doc.setLineWidth(0.5);
@@ -102,7 +89,6 @@ const Profile = () => {
 
             let y = profileInfoStartY; // Starting y position after the image
             profileDetails.forEach((detail) => {
-                // Split the label and value to apply bold styling to the label
                 const [label, value] = detail.split(": ");
                 doc.setFont("Helvetica", "bold");
                 doc.text(label + ":", margin, y);
@@ -124,22 +110,18 @@ const Profile = () => {
             doc.save(`${profileData.pangalan}(BridgeBuilders).pdf`);
         };
 
-        // Handle image load error
-        logoImg.onerror = () => {
-            console.error("Logo image failed to load.");
-        };
-
-        logoImg.src = "/src/assets/logo.png"; // Trigger logo image loading
-    };
+  
 
     // Handle profile picture load error
-    img.onerror = () => {
+    profileImage.onerror = () => {
         console.error("Profile picture failed to load.");
     };
 
-    img.src = imgUrl; // Trigger profile picture loading
-};
-  
+    // Trigger profile picture loading
+    profileImage.src = profilePictureUrl; 
+  };
+
+
 
   return (
     <>
@@ -236,12 +218,11 @@ const Profile = () => {
                 </a>
               </Tooltip>
               <Tooltip tooltipText={"Download"} className=" mr-6 ml-6 ">
-                <span 
-                  className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer" 
-                  onClick={handleDownloadClick}
-                >
+                <a onClick={handleDownloadClick}>
+                  <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer"> 
                   download
-                </span>
+                  </span>
+                </a>
               </Tooltip>
             </div>
 
@@ -258,21 +239,21 @@ const Profile = () => {
               <Goal
                 name="goal1"
                 goalsAchieved={profileData.goalsAchieved}
-                image={"/src/assets/logo.png"}
+                image={logo2}
                 title="Mental"
                 goal={1}
               />
               <Goal
                 name="goal2"
                 goalsAchieved={profileData.goalsAchieved}
-                image={"/src/assets/logo.png"}
+                image={logo2}
                 title="Physical/Social"
                 goal={2}
               />
               <Goal
                 name="goal3"
                 goalsAchieved={profileData.goalsAchieved}
-                image={"/src/assets/logo.png"}
+                image={logo2}
                 title="Support to Caregiver"
                 goal={3}
               />
