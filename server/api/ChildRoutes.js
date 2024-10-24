@@ -26,10 +26,8 @@ apiRouter.get("/profile/:caseNo", async (req, res) => {
     console.log(nanay.pangalan)
 
     tatay = await Father.findOne({ pangalan: kid.tatay });
-    console.log(nanay.pangalan)
+    console.log(tatay.pangalan)
     
-    
-
     res.status(200).json(kid);
   } catch (error) {
     res.status(500).send("Error fetching children data");
@@ -37,10 +35,7 @@ apiRouter.get("/profile/:caseNo", async (req, res) => {
 });
 
 //save edited profile changes
-apiRouter.post(
-  "/editProfile/:caseNo",
-  upload.single("picture"),
-  async (req, res) => {
+apiRouter.post("/edit/:caseNo", upload.single("picture"), async (req, res) => {
     const caseNo = req.params.caseNo;
 
     const profileData = req.body;
