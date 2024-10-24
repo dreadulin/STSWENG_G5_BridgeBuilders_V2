@@ -228,12 +228,11 @@ const Profile = () => {
                 </a>
               </Tooltip>
               <Tooltip tooltipText={"Download"} className=" mr-6 ml-6 ">
-                <span 
-                  className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer" 
-                  onClick={handleDownloadClick}
-                >
+                <a onClick={handleDownloadClick}>
+                  <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer"> 
                   download
-                </span>
+                  </span>
+                </a>
               </Tooltip>
             </div>
 
