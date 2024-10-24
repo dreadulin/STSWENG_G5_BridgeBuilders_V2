@@ -52,7 +52,7 @@ const Profile = () => {
     doc.text("Profile Information", (doc.internal.pageSize.width - titleWidth) / 2, titleYPosition);
 
     // Add the profile picture
-    const profilePictureUrl = profileData.picture ?? "/src/assets/logo.png"; // Renamed for clarity
+    const profilePictureUrl = profileData.picture ?? "/assets/logo.png"; // Renamed for clarity
     const profileImage = new Image();
     profileImage.src = profilePictureUrl;
 
@@ -119,7 +119,7 @@ const Profile = () => {
         };
 
         // Trigger logo image loading
-        companyLogoImage.src = "/src/assets/logo.png"; 
+        companyLogoImage.src = "/assets/logo.png"; 
     };
 
     // Handle profile picture load error
