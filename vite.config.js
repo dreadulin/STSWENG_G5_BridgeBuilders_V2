@@ -9,12 +9,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(__dirname, "./src"), // Shortcut for imports
     },
+  },
+  optimizeDeps: {
+    include: ["jspdf"], // Ensure Vite pre-bundles jspdf if needed
   },
   build: {
     rollupOptions: {
-      external: ["jspdf"], 
+      external: [], // Remove jspdf from external unless you're deliberately excluding it
     },
   },
 });
