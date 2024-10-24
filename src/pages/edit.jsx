@@ -181,7 +181,7 @@ const Edit = () => {
         }
       });
 
-      await axios.post(`/api/editProfile/${caseNo}`, formData);
+      await axios.post(`/api/edit/${caseNo}`, formData);
 
       setStatus({
         open: true,

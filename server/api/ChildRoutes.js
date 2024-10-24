@@ -38,7 +38,7 @@ apiRouter.get("/profile/:caseNo", async (req, res) => {
 
 //save edited profile changes
 apiRouter.post(
-  "/editProfile/:caseNo",
+  "/edit/:caseNo",
   upload.single("picture"),
   async (req, res) => {
     const caseNo = req.params.caseNo;
