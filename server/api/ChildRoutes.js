@@ -36,11 +36,31 @@ apiRouter.get("/profile/:caseNo", async (req, res) => {
   }
 });
 
+//edit page
+apiRouter.get("/edit/:caseNo", async (req, res) => {
+  var kid;
+  var nanay;
+  var tatay;
+  try {
+    kid = await Child.findById(req.params.caseNo);
+    console.log(kid.pangalan)
+
+    nanay = await Mother.findOne({ pangalan: kid.nanay });
+    console.log(nanay.pangalan)
+
+    tatay = await Father.findOne({ pangalan: kid.tatay });
+    console.log(nanay.pangalan)
+    
+    
+
+    res.status(200).json(kid);
+  } catch (error) {
+    res.status(500).send("Error fetching children data");
+  }
+});
+
 //save edited profile changes
-apiRouter.post(
-  "/edit/:caseNo",
-  upload.single("picture"),
-  async (req, res) => {
+apiRouter.post("/edit/:caseNo", upload.single("picture"), async (req, res) => {
     const caseNo = req.params.caseNo;
 
     const profileData = req.body;
