@@ -62,7 +62,7 @@ const Profile = () => {
 
       // Load and add the company logo
       const logoImg = new Image();
-      logoImg.src = "/src/assets/logo.png"; // Company logo path
+      logoImg.src = {logo2}; // Company logo path
 
       logoImg.onload = () => {
         // Calculate position for the logo at the bottom right
@@ -115,7 +115,7 @@ const Profile = () => {
 
       // Handle logo image load error
       logoImg.onerror = () => {
-        console.error("Logo image failed to load.");
+        console.error("Profile picture failed to load.");
       };
 
       // Trigger logo image loading
