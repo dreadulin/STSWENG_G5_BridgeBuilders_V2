@@ -60,14 +60,6 @@ const Profile = () => {
         // Add profile picture
         doc.addImage(profileImage, 'JPEG', margin, profileImageYPosition, 70, 70);
 
-        companyLogoImage.onload = () => {
-            // Calculate position for the logo at the bottom right
-            const logoX = doc.internal.pageSize.width - logoSize - margin; // Position on the right
-            const logoY = doc.internal.pageSize.height - logoSize - margin - logoOffset; // Position a bit lower at the bottom
-
-            // Add company logo
-            doc.addImage(companyLogoImage, 'PNG', logoX, logoY, logoSize, logoSize);
-
             // Draw a line below the title
             doc.setLineWidth(0.5);
             doc.setDrawColor(0, 0, 0); // Black line
@@ -109,7 +101,7 @@ const Profile = () => {
             doc.save(`${profileData.pangalan}(BridgeBuilders).pdf`);
         };
 
-    };
+  
 
     // Handle profile picture load error
     profileImage.onerror = () => {
