@@ -166,4 +166,36 @@ apiRouter.post("/intakeChild", async (req, res) => {
   }
 });
 
+// Attach file to a profile
+apiRouter.post("/profile/:caseNo/upload", upload.single("file"), async (req, res) => {
+  const caseNo = req.params.caseNo;
+
+  try {
+    // Check if the file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    // Define file details
+    const fileDetails = {
+      fileName: req.file.originalname,
+      filePath: req.file.path,  // This stores the relative path to where the file is saved
+      fileType: req.file.mimetype, // MIME type of the file (e.g., application/pdf, image/jpeg)
+      uploadDate: new Date(), // Store the current date and time
+    };
+
+    // Find the child profile and update with the file details
+    await Child.updateOne(
+      { _id: caseNo },
+      { $push: { attachedFiles: fileDetails } }
+    );
+
+    res.status(200).json({ message: "File uploaded and attached to profile successfully" });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).send("Error uploading file");
+  }
+});
+
+
 export default apiRouter;

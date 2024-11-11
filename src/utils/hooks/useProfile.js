@@ -11,6 +11,7 @@ const initialState = {
   birthday: "",
   relihiyon: "",
   goalsAchieved: [],
+  attachedFiles: [],
 };
 
 const useProfile = (username) => {
@@ -40,6 +41,7 @@ const useProfile = (username) => {
             birthday: res.data.birthday,
             relihiyon: res.data.relihiyon,
             goalsAchieved: res.data.goalsAchieved,
+            attachedFiles: res.data.attachedFiles,
           });
         }
       } catch (err) {
