@@ -7,11 +7,13 @@ import axios from "../axiosInstance.js";
 import logo2 from "@/assets/logo2.png";
 import { jsPDF } from "jspdf";
 import { useRef } from "react"; // Import useRef for file input reference
+import { useState } from "react";
 
 const Profile = () => {
   const { caseNo } = useParams();
   const { profileData } = useProfile(caseNo);
   const fileInputRef = useRef(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const handleArchiveClick = async () => {
     console.log("handling archive");
@@ -34,9 +36,7 @@ const Profile = () => {
     const margin = 14;
     const lineHeight = 15;
     const titleYPosition = 22;
-    const profileImageYPosition = 35;
-    const logoSize = 30;
-    const logoOffset = -15; 
+    const profileImageYPosition = 35; 
     const profileInfoStartY = 122;
     const footerYPosition = doc.internal.pageSize.height - 10;
 
@@ -121,8 +121,14 @@ const Profile = () => {
         });
   
         console.log("File uploaded successfully:", response.data);
+  
+        // Display success alert and refresh the page
+        alert("File uploaded successfully!");
+        window.location.reload(); // Refresh the page
       } catch (error) {
         console.error("Error uploading file:", error);
+        // Optionally, you can show an alert for error cases as well
+        alert("Error uploading file. Please try again.");
       }
     }
   };  
@@ -288,7 +294,7 @@ const Profile = () => {
               <h1 className="text-4xl mr-4">More Information</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
             </div>
-
+            
             <div className="mt-4">
               <button
                 className="bg-bb-violet text-white px-4 py-2 rounded-lg"
@@ -303,7 +309,7 @@ const Profile = () => {
                 onChange={handleFileImport}
               />
             </div>
-      
+
             <div className="mt-4">
             <h3 className="text-xl font-bold">Attached Files</h3>
             <ul className="list-disc pl-5 mt-2">
@@ -311,43 +317,40 @@ const Profile = () => {
                 profileData.attachedFiles
                 .filter((file) => file.fileStatus === "Active")
                 .map((file, index) => (
-                  <li key={index} className="flex items-center mb-2">
-                    {/* Assuming filePath is a valid URL to the file */}
-                    <span className="text-gray-700">{file.fileName}</span>
+                  <li key={index} className="flex items-center justify-between mb-2">
+                    {/* Make the file name clickable */}
+                    <a
+                      href={file.filePath} // Assuming filePath is the valid URL for the file
+                      target="_blank" // Open in a new tab
+                      rel="noopener noreferrer" // Security measure for external links
+                      className="text-blue-500 hover:underline"
+                    >
+                      {file.fileName}
+                    </a>
 
-                    {/* Buttons container */}
                     <div className="ml-auto flex items-center space-x-2">
-                      
-                      {/* Download link for the file */}
-                      <a
-                        href={file.filePath} // Full URL to the file
-                        download={file.fileName} // Triggers the download with the file name
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline px-2 py-1 border border-blue-600 rounded-lg"
-                        style={{ cursor: "pointer" }} // Ensure the link appears clickable
-                      >
-                        Download
-                      </a>
-
-                      {/* Archive Button */}
-                      <button
+                    {/* Archive Button */}
+                    <button
                         onClick={() => handleArchiveFile(file._id)} 
                         className="text-blue-600 hover:underline px-2 py-1 border border-blue-600 rounded-lg"
                       >
                         Archive
                       </button>
-                    </div>
+                      </div>
+
+                    
                   </li>
-                ))
-              ) : (
-                <p>No files attached yet.</p>
-              )}
-            </ul>
-          </div>
+      ))
+    ) : (
+      <p>No files attached yet.</p>
+    )}
+  </ul>
+</div>
+
+</div>
           </div>
         </div>
-      </div>
+      
     </>
   );
 };

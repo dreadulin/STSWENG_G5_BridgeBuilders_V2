@@ -214,9 +214,9 @@ apiRouter.post("/profile/:caseNo/upload", upload.single("file"), async (req, res
     // Define file details
     const fileDetails = {
       fileName: req.file.originalname,
-      filePath: req.file.path,  // This stores the relative path to where the file is saved
+      filePath: req.file.path,  
       fileType: req.file.mimetype, // MIME type of the file (e.g., application/pdf, image/jpeg)
-      uploadDate: new Date(), // Store the current date and time
+      uploadDate: new Date(), 
     };
 
     // Find the child profile and update with the file details
