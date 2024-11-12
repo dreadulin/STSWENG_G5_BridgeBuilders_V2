@@ -172,7 +172,7 @@ apiRouter.post("/archiveFile/:caseNo/:fileId", async (req, res) => {
 
   const caseNo = req.params.caseNo;   
   const fileId = req.params.fileId;   
-
+  
   try {
     // Find the profile document 
     const currentDocument = await Child.findById(caseNo);
@@ -198,6 +198,61 @@ apiRouter.post("/archiveFile/:caseNo/:fileId", async (req, res) => {
   } catch (error) {
     console.error("Error updating file archive status:", error);
     res.status(500).send("Error updating file archive status");
+  }
+});
+
+// Display filtered archived files
+apiRouter.get("/archivedFiles", async (req, res) => {
+  try {
+    const { program, year, edad, kasarian } = req.query;
+
+    let query = {};
+
+    if (program) {
+      query.program = program;
+    }
+
+    if (year) {
+      query.yearAdmitted = year;
+    }
+
+    if (edad) {
+      const [minAge, maxAge] = edad.split("-").map(Number);
+      query.edad = { $gte: minAge, $lte: maxAge };
+    }
+
+    if (kasarian) {
+      query.kasarian = { $regex: kasarian, $options: "i" };
+    }
+
+    const allProfiles = await Child.find(query);
+
+    if (!allProfiles || allProfiles.length === 0) {
+      return res.status(200).json([]); // Return an empty array
+    }
+
+    let archivedFiles = [];
+
+    allProfiles.forEach(profileData => {
+      const archived = profileData.attachedFiles
+        .filter(file => file.fileStatus === "Deleted")
+        .map(file => ({
+          ...file.toObject(),
+          caseNo: profileData._id,
+          fileId: file._id,
+          pangalan: profileData.pangalan,
+          edad: profileData.edad,
+          kasarian: profileData.kasarian,
+        }));
+
+      archivedFiles = archivedFiles.concat(archived);
+    });
+
+    // Return the filtered archived files
+    res.status(200).json(archivedFiles);
+  } catch (error) {
+    console.error("Error retrieving archived files:", error);
+    res.status(500).send("Error retrieving archived files");
   }
 });
 
