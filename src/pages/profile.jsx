@@ -127,6 +127,23 @@ const Profile = () => {
     }
   };  
 
+  const handleArchiveFile = async () => {
+    console.log("handling archive file");
+    const confirmArchiveFile = window.confirm(
+      "Are you sure you want to archive this file?"
+    );
+
+    if(confirmArchiveFile) {
+      try{
+        await axios.post(`/api/archiveFile/${caseNo}`);
+      } catch (error) {
+        console.error("Error archiving file: ", error);
+      }
+    } else {
+      console.log("Archive Cancelled");
+    }
+  }; 
+
   const triggerFileInput = () => {
     fileInputRef.current.click();
   };
@@ -291,7 +308,9 @@ const Profile = () => {
             <h3 className="text-xl font-bold">Attached Files</h3>
             <ul className="list-disc pl-5 mt-2">
               {profileData.attachedFiles && profileData.attachedFiles.length > 0 ? (
-                profileData.attachedFiles.map((file, index) => (
+                profileData.attachedFiles
+                .filter((file) => file.fileStatus === "Active")
+                .map((file, index) => (
                   <li key={index} className="flex items-center mb-2">
                     {/* Assuming filePath is a valid URL to the file */}
                     <span className="text-gray-700">{file.fileName}</span>
@@ -313,7 +332,7 @@ const Profile = () => {
 
                       {/* Archive Button */}
                       <button
-                        onClick={() => handleArchiveFile(file.fileId)} // Assuming fileId is its identifier
+                        onClick={() => handleArchiveFile()} 
                         className="text-blue-600 hover:underline px-2 py-1 border border-blue-600 rounded-lg"
                       >
                         Archive
