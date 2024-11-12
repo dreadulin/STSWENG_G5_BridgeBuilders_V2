@@ -127,7 +127,7 @@ const Profile = () => {
     }
   };  
 
-  const handleArchiveFile = async () => {
+  const handleArchiveFile = async (fileId) => {
     console.log("handling archive file");
     const confirmArchiveFile = window.confirm(
       "Are you sure you want to archive this file?"
@@ -135,7 +135,7 @@ const Profile = () => {
 
     if(confirmArchiveFile) {
       try{
-        await axios.post(`/api/archiveFile/${caseNo}`);
+        await axios.post(`/api/archiveFile/${caseNo}/${fileId}`);
       } catch (error) {
         console.error("Error archiving file: ", error);
       }
@@ -332,7 +332,7 @@ const Profile = () => {
 
                       {/* Archive Button */}
                       <button
-                        onClick={() => handleArchiveFile()} 
+                        onClick={() => handleArchiveFile(file._id)} 
                         className="text-blue-600 hover:underline px-2 py-1 border border-blue-600 rounded-lg"
                       >
                         Archive

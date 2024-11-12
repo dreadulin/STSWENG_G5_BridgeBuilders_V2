@@ -166,6 +166,41 @@ apiRouter.post("/intakeChild", async (req, res) => {
   }
 });
 
+// Archive an attached file
+apiRouter.post("/archiveFile/:caseNo/:fileId", async (req, res) => {
+  console.log("Editing file archive status...");
+
+  const caseNo = req.params.caseNo;   
+  const fileId = req.params.fileId;   
+
+  try {
+    // Find the profile document 
+    const currentDocument = await Child.findById(caseNo);
+
+    if (!currentDocument) {
+      return res.status(404).send("Case not found");
+    }
+
+    // Find the scpecific attached file on the profile
+    const file = currentDocument.attachedFiles.find(file => file._id.toString() === fileId);
+
+    if (!file) {
+      return res.status(404).send("File not found");
+    }
+
+    // Change file status
+    file.fileStatus = file.fileStatus === "Active" ? "Deleted" : "Active";
+
+    // Save the updated document
+    await currentDocument.save();
+
+    res.status(200).send("File archive status updated successfully");
+  } catch (error) {
+    console.error("Error updating file archive status:", error);
+    res.status(500).send("Error updating file archive status");
+  }
+});
+
 // Attach file to a profile
 apiRouter.post("/profile/:caseNo/upload", upload.single("file"), async (req, res) => {
   const caseNo = req.params.caseNo;
