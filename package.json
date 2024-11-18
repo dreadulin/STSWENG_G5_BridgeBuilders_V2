@@ -10,8 +10,7 @@
     "start": "node ./server/server.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "echo 'No tests available yet' && exit 0",
-    "cy:open": "cypress open"
+    "test": "echo 'No tests available yet' && exit 0"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
