@@ -12,7 +12,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "echo 'No tests available yet' && exit 0",
-    "cy:open": "cypress open"
+    "dev:cy:open": "concurrently 'cypress open' 'npm run dev'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
