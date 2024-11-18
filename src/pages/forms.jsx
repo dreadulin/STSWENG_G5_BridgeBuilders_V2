@@ -13,6 +13,7 @@ import childSchema from "../../schemas/FormValidationSchema.js";
 import FormError from "@/components/ui/FormError.jsx";
 import * as Yup from "yup";
 import Status from "@/components/ui/Status.jsx";
+import Tooltip from "@/components/ui/Tooltip";
 
 const initialUser = {
   pangalan: "",
@@ -414,12 +415,25 @@ const Forms = () => {
       });
   };
 
+  const handleEditForm = () => {
+    console.log("Edit button clicked!");
+  };
+
   return (
     <>
       <Appbar />
       <div className="flex h-[calc(100vh-7rem)]">
         <div className="md:w-1/3 lg:w-1/4 bg-bb-purple p-4 space-y-8 overflow-auto">
-          <h1 className="text-6xl mb-16">Intake Form</h1>
+        <div className="flex items-center justify-between mb-16">
+          <h1 className="text-6xl">Intake Form</h1>
+          <Tooltip tooltipText={"Edit"} className="ml-4">
+            <a onClick={handleEditForm}>
+            <span className="material-symbols-outlined text-3xl md:text-5xl text-bb-white hover:text-bb-violet cursor-pointer">
+              edit
+            </span>
+            </a>
+          </Tooltip>
+        </div>
 
           {sections.map((section, index) => (
             <div
