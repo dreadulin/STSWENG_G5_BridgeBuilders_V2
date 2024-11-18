@@ -1,9 +1,11 @@
 describe("US# 4", () => {
-  beforeEach(() => {
-    cy.login("gege", "akutami");
-  })
   it("Verify if the user can view children's archived files", () => {
+    cy.login("gege", "akutami");
+    cy.url().should("contain", "dashboard");
+    cy.get("a").contains("/archive");
   });
+
+  it("Verify if admin can view both home care and children’s archived files", () => {});
 });
 
 /*
