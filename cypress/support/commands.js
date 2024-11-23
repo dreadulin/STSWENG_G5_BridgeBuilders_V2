@@ -30,9 +30,10 @@ Cypress.Commands.add("login", (username, password) => {
     cy.get("#username").type(username);
     cy.get("#password").type(password);
     cy.get("button").click();
-    cy.getAllSessionStorage().then((value) => {
-      cy.log("sessionStorage", value) 
-    })
     cy.contains("Welcome").should("contain", username);
   });
+});
+
+Cypress.Commands.add("logout", () => {
+  cy.get('a[href="/logout"]').click();
 });
