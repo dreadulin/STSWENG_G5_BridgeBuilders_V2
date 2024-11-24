@@ -227,6 +227,7 @@ const Profile = () => {
             </div>
 
             <div className="flex w-full overflow-auto">
+            <div className="flex flex-col">
               <Goal
                 name="goal1"
                 goalsAchieved={profileData.goalsAchieved}
@@ -234,6 +235,24 @@ const Profile = () => {
                 title="Mental"
                 goal={1}
               />
+              {/* Subgoals List */}
+              <div className="mt-4">
+                  <h2 className="text-2xl font-semibold mb-2">Subgoals</h2>
+                  <div className="border border-gray-300 rounded-lg p-4 bg-light-violet shadow-sm">
+                    {profileData.subgoals?.length > 0 ? (
+                      <ul className="list-disc pl-8 space-y-2">
+                        {profileData.subgoals.map((subgoal, index) => (
+                          <li key={index} className="text-lg text-bb-violet">
+                            {subgoal}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-lg text-gray-500">No subgoals added yet.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
               <Goal
                 name="goal2"
                 goalsAchieved={profileData.goalsAchieved}

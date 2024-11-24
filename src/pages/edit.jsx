@@ -152,32 +152,30 @@ const Edit = () => {
       let updatedGoals = [...prevState.goalsAchieved];
   
       if (checked) {
-        // If goal is checked, add goal to goalsAchieved
         updatedGoals = [...updatedGoals, value];
       } else {
-        // If goal is unchecked, remove goal from goalsAchieved
         updatedGoals = updatedGoals.filter((goal) => goal !== value);
       }
   
       return {
         ...prevState,
-        goalsAchieved: updatedGoals,  // Update the goalsAchieved array
+        goalsAchieved: updatedGoals,  
       };
     });
   };
 
   const handleAddSubgoal = (newSubgoal) => {
     setProfileData((prevState) => {
-      // Ensure prevState.subgoals is always an array
+      
       const updatedSubgoals = Array.isArray(prevState.subgoals)
         ? prevState.subgoals
-        : []; // Default to an empty array if it's not an array
+        : []; 
 
-      // Check if newSubgoal is already in the array
+   
       if (!updatedSubgoals.includes(newSubgoal)) {
         return {
           ...prevState,
-          subgoals: [...updatedSubgoals, newSubgoal], // Add new subgoal
+          subgoals: [...updatedSubgoals, newSubgoal], 
         };
       }
       return prevState;
@@ -456,11 +454,29 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
-                  handleAddSubgoal={handleAddSubgoal}
+                  
                   image={logo2}
                   title="Mental"
                   goal={1}
                 />
+
+                {/* Subgoals List */}
+                <div className="mt-4">
+                  <h2 className="text-2xl font-semibold mb-2">Subgoals</h2>
+                  <div className="border border-gray-300 rounded-lg p-4 bg-light-violet shadow-sm">
+                    {profileData.subgoals?.length > 0 ? (
+                      <ul className="list-disc pl-8 space-y-2">
+                        {profileData.subgoals.map((subgoal, index) => (
+                          <li key={index} className="text-lg text-bb-violet">
+                            {subgoal}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-lg text-gray-500">No subgoals added yet.</p>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div className="flex flex-col">
@@ -474,6 +490,7 @@ const Edit = () => {
                   title="Physical/Social"
                   goal={2}
                 />
+                
               </div>
 
               <div className="flex flex-col">

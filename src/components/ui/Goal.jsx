@@ -43,6 +43,7 @@ const Goal = forwardRef(
       title,
       goal,
       goalsAchieved,
+      subgoals, // Subgoals passed down from the parent component
       handleGoalChange,
       handleAddSubgoal,
       editMode = false,
@@ -87,7 +88,7 @@ const Goal = forwardRef(
         // Pass the new subgoal to the parent component's function
         handleAddSubgoal(newSubgoal);
     
-        setNewSubgoal(""); // Clear the input field after saving
+        setNewSubgoal(""); 
         setShowModal(false); // Close the modal
       }
     };
@@ -102,12 +103,12 @@ const Goal = forwardRef(
       <div
         ref={ref}
         className={cn(
-          `flex flex-col w-72 h-80 mr-4 ml-4 mt-8 mb-4 bg-bb-light-purple flex-none`,
+          `flex flex-col w-80 h-80 mr-4 ml-4 mt-8 mb-4 bg-bb-light-purple flex-none`,
           className
         )}
         {...props}
       >
-        {/* Existing Dropdown for Progress */}
+        {/* Main Goals Dropdown */}
         <Dropdown
           title={"Main Goals"}
           className="flex w-full bg-bb-white p-2 text-2xl transition-colors hover:bg-bb-violet hover:text-bb-white"
@@ -146,36 +147,19 @@ const Goal = forwardRef(
           })}
         </Dropdown>
 
-        {/* New Dropdown below Title */}
-        <Dropdown
-          title={"Subgoals"}
-          className="flex w-full bg-bb-white p-2 text-2xl transition-colors hover:bg-bb-violet hover:text-bb-white"
-          optionContainerClass="w-full"
-        >
-          {/* Positioned the Add button above the options with some spacing */}
-          <div className="w-full mb-4 flex justify-center items-center h-16">
-            <button
-              className="bg-bb-violet text-white py-2 px-4 rounded-lg text-sm font-semibold shadow-md hover:bg-bb-dark-purple hover:shadow-lg transition-all duration-200"
-              onClick={() => setShowModal(true)} // Show modal when clicked
-            >
-              Add New Subgoal
-            </button>
-          </div>
+       {/* Add subgoal button */}
+       <div className="w-full mb-0 flex justify-center items-center h-20">
+        {editMode && (
+          <button
+            className="bg-bb-violet text-white py-2 px-4 rounded-lg text-sm font-semibold shadow-md hover:bg-bb-dark-purple hover:shadow-lg transition-all duration-200"
+            onClick={() => setShowModal(true)} // Show modal when clicked
+          >
+          Add Subgoal
+          </button>
+        )}
+      </div>
 
-          {/* Displaying the additional options below the "Add" button */}
-          <div className="w-full">
-            {additionalOptions.map((option, index) => (
-              <Fragment key={index}>
-                <span className="m-4 flex items-center">
-                  <h1 className="w-3/4 text-xl">{option}</h1>
-                </span>
-                <hr />
-              </Fragment>
-            ))}
-          </div>
-        </Dropdown>
-
-        {/* Modal for adding a new subgoal */}
+        {/* Add subgoal modal */}
         {showModal && (
           <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg w-1/3">
@@ -216,6 +200,8 @@ const Goal = forwardRef(
         >
           {goalCompleted ? "Complete" : "Incomplete"}
         </h3>
+
+        
         <span
           ref={progressRef}
           className="h-2 w-0 bg-progress-green text-center text-bb-white transition-all duration-200"
