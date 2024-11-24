@@ -113,7 +113,6 @@ const Profile = () => {
         const formData = new FormData();
         formData.append("file", file);
   
-        // Send the file to the backend
         const response = await axios.post(`/api/profile/${caseNo}/upload`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -122,12 +121,11 @@ const Profile = () => {
   
         console.log("File uploaded successfully:", response.data);
   
-        // Display success alert and refresh the page
         alert("File uploaded successfully!");
-        window.location.reload(); // Refresh the page
+        window.location.reload(); 
       } catch (error) {
         console.error("Error uploading file:", error);
-        // Optionally, you can show an alert for error cases as well
+        
         alert("Error uploading file. Please try again.");
       }
     }
@@ -261,12 +259,13 @@ const Profile = () => {
               Program: {profileData.program}
             </h2>
 
-            <div className="flex items-center mt-12">
+            <div className="flex items-center mt-5">
               <h1 className="text-4xl mr-4">Intervention</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
             </div>
 
             <div className="flex w-full overflow-auto">
+            <div className="flex flex-col">
               <Goal
                 name="goal1"
                 goalsAchieved={profileData.goalsAchieved}
@@ -274,6 +273,24 @@ const Profile = () => {
                 title="Mental"
                 goal={1}
               />
+              {/* Subgoals List */}
+              <div className="mt-4">
+                  <h2 className="text-2xl font-semibold mb-2">Subgoals</h2>
+                  <div className="border border-gray-300 rounded-lg p-4 bg-light-violet shadow-sm">
+                    {profileData.subgoals?.length > 0 ? (
+                      <ul className="list-disc pl-8 space-y-2">
+                        {profileData.subgoals.map((subgoal, index) => (
+                          <li key={index} className="text-lg text-bb-violet">
+                            {subgoal}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-lg text-gray-500">No subgoals added</p>
+                    )}
+                  </div>
+                </div>
+              </div>
               <Goal
                 name="goal2"
                 goalsAchieved={profileData.goalsAchieved}
