@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node make-data.js",
-    "start": "ndoe make-data.js"
+    "build": "node make-data.js"
   },
   "keywords": [],
   "author": "",
