@@ -146,20 +146,43 @@ const Edit = () => {
   };
 
   const handleGoalChange = (event) => {
-    if (!profileData.goalsAchieved.includes(event.target.value)) {
-      setProfileData({
-        ...profileData,
-        goalsAchieved: [...profileData.goalsAchieved, event.target.value],
-      });
-    } else {
-      setProfileData({
-        ...profileData,
-        goalsAchieved: profileData.goalsAchieved.filter(
-          (goal) => goal != event.target.value
-        ),
-      });
-    }
+    const { value, checked } = event.target;
+  
+    setProfileData((prevState) => {
+      let updatedGoals = [...prevState.goalsAchieved];
+  
+      if (checked) {
+        updatedGoals = [...updatedGoals, value];
+      } else {
+        updatedGoals = updatedGoals.filter((goal) => goal !== value);
+      }
+  
+      return {
+        ...prevState,
+        goalsAchieved: updatedGoals,  
+      };
+    });
   };
+
+  const handleAddSubgoal = (newSubgoal) => {
+    setProfileData((prevState) => {
+      
+      const updatedSubgoals = Array.isArray(prevState.subgoals)
+        ? prevState.subgoals
+        : []; 
+
+   
+      if (!updatedSubgoals.includes(newSubgoal)) {
+        return {
+          ...prevState,
+          subgoals: [...updatedSubgoals, newSubgoal], 
+        };
+      }
+      return prevState;
+    });
+  };
+
+  
 
   const handleSaveClick = async () => {
     setSubmitDisabled(true);
@@ -431,10 +454,29 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
+                  
                   image={logo2}
                   title="Mental"
                   goal={1}
                 />
+
+                {/* Subgoals List */}
+                <div className="mt-4">
+                  <h2 className="text-2xl font-semibold mb-2">Subgoals</h2>
+                  <div className="border border-gray-300 rounded-lg p-4 bg-light-violet shadow-sm">
+                    {profileData.subgoals?.length > 0 ? (
+                      <ul className="list-disc pl-8 space-y-2">
+                        {profileData.subgoals.map((subgoal, index) => (
+                          <li key={index} className="text-lg text-bb-violet">
+                            {subgoal}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-lg text-gray-500">No subgoals added</p>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div className="flex flex-col">
@@ -443,10 +485,12 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
+                  handleAddSubgoal={handleAddSubgoal}
                   image={logo2}
                   title="Physical/Social"
                   goal={2}
                 />
+                
               </div>
 
               <div className="flex flex-col">
@@ -455,6 +499,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
+                  handleAddSubgoal={handleAddSubgoal}
                   image={logo2}
                   title="Support to Caregiver"
                   goal={3}

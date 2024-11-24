@@ -11,6 +11,7 @@ const initialState = {
   birthday: "",
   relihiyon: "",
   goalsAchieved: [],
+  subgoals: [],
   attachedFiles: [],
 };
 
@@ -41,6 +42,7 @@ const useProfile = (username) => {
             birthday: res.data.birthday,
             relihiyon: res.data.relihiyon,
             goalsAchieved: res.data.goalsAchieved,
+            subgoals: res.data.subgoals,
             attachedFiles: res.data.attachedFiles,
           });
         }

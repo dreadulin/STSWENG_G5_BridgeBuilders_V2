@@ -36,37 +36,83 @@ apiRouter.get("/profile/:caseNo", async (req, res) => {
 
 //save edited profile changes
 apiRouter.post("/edit/:caseNo", upload.single("picture"), async (req, res) => {
-    const caseNo = req.params.caseNo;
+  const caseNo = req.params.caseNo;
 
-    const profileData = req.body;
+  const profileData = req.body;
 
-    try {
-      if (profileData.goalsAchieved.length == 0) {
-        profileData.goalsAchieved = [];
-      } else {
-        profileData.goalsAchieved = profileData.goalsAchieved.split(",");
-      }
-      await editChildSchema.validate(profileData, { abortEarly: false });
+  try {
+    // Transforming goalsAchieved to an array if it's not empty
+    if (profileData.goalsAchieved.length == 0) {
+      profileData.goalsAchieved = [];
+    } else {
+      profileData.goalsAchieved = profileData.goalsAchieved.split(",");
+    }
 
-      if (req.file) {
-        profileData.picture = await imageUploader(req.file);
-      }
+    // Transforming subgoals in the same way as goalsAchieved
+    if (profileData.subgoals.length == 0) {
+      profileData.subgoals = [];
+    } else {
+      profileData.subgoals = profileData.subgoals.split(",");
+    }
 
-      await Child.updateOne({ _id: caseNo }, profileData);
-      return res.status(200).json({ message: "Created child successfully" });
-    } catch (error) {
-      console.log("THERES ACTUALLY AN ERROR 0_0", error.message);
-      if (error instanceof Yup.ValidationError) {
-        // Validation failed
-        const errors = error.inner.map((err) => err.message);
-        console.log(errors);
-        return res.status(400).json({ errors });
-      }
+    // Validate the profile data
+    await editChildSchema.validate(profileData, { abortEarly: false });
+
+    // If a picture was uploaded, handle it
+    if (req.file) {
+      profileData.picture = await imageUploader(req.file);
+    }
+
+    // Update the child record with the new profile data
+    await Child.updateOne({ _id: caseNo }, profileData);
+    return res.status(200).json({ message: "Created child successfully" });
+  } catch (error) {
+    console.log("THERES ACTUALLY AN ERROR 0_0", error.message);
+    if (error instanceof Yup.ValidationError) {
+      // Validation failed
+      const errors = error.inner.map((err) => err.message);
+      console.log(errors);
+      return res.status(400).json({ errors });
     }
   }
-);
+});
 
-//archive or unarchive profile
+
+apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
+  const caseNo = req.params.caseNo;
+  
+  const { subgoal } = req.body;
+  
+  if (!subgoal) {
+    return res.status(400).json({ error: "Subgoal missing" });
+  }
+
+  if (!caseNo) {
+    return res.status(400).json({ error: "Case number is required" });
+  }
+
+  try {
+    // Update the subgoals directly in the database without fetching the profileData
+    const result = await Child.updateOne(
+      { _id: caseNo },
+      { $push: { subgoals: subgoal } }  // This will push the new subgoal into the array
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: "Profile not found or no changes made" });
+    }
+
+    return res.status(200).json({ message: "Subgoal saved successfully!" });
+
+  } catch (err) {
+    
+    console.error("Error while saving subgoal:", err);
+    return res.status(500).json({ error: "Failed to save subgoal" });
+  }
+});
+
+
+// archive or unarchive profile
 apiRouter.post("/archiveProfile/:caseNo", async (req, res) => {
   console.log("Editing case archive status...");
   const caseNo = (req.params.caseNo);
