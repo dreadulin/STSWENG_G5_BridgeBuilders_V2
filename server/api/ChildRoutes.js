@@ -100,6 +100,7 @@ apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
 
     if (result.modifiedCount === 0) {
       return res.status(404).json({ error: "Profile not found or no changes made" });
+
     }
 
     return res.status(200).json({ message: "Subgoal saved successfully!" });
@@ -111,6 +112,40 @@ apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
   }
 });
 
+
+
+apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
+  const caseNo = req.params.caseNo;
+  
+  const { subgoal } = req.body;
+  
+  if (!subgoal) {
+    return res.status(400).json({ error: "Subgoal missing" });
+  }
+
+  if (!caseNo) {
+    return res.status(400).json({ error: "Case number is required" });
+  }
+
+  try {
+    // Update the subgoals directly in the database without fetching the profileData
+    const result = await Child.updateOne(
+      { _id: caseNo },
+      { $push: { subgoals: subgoal } }  // This will push the new subgoal into the array
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: "Profile not found or no changes made" });
+    }
+
+    return res.status(200).json({ message: "Subgoal saved successfully!" });
+
+  } catch (err) {
+    
+    console.error("Error while saving subgoal:", err);
+    return res.status(500).json({ error: "Failed to save subgoal" });
+  }
+});
 
 // archive or unarchive profile
 apiRouter.post("/archiveProfile/:caseNo", async (req, res) => {

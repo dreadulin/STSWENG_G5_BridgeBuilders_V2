@@ -21,8 +21,6 @@ const useProfile = (username) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // pseudo get user information (while no server yet)
-    //const user = Users.find((user) => user.pangalan == username);
     setLoading(true);
     const fetchUser = async () => {
       try {

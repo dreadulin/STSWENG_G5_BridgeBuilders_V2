@@ -3,10 +3,13 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+
 const apiRouter = express.Router();
+
 // Helper to manage file paths 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 // Set storage engine for multer
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '../../src/assets/'), 
@@ -15,6 +18,7 @@ const storage = multer.diskStorage({
     cb(null, 'login-bg' + ext); 
   }
 });
+
 // File filter to allow only jpg 
 const fileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
@@ -24,12 +28,14 @@ const fileFilter = (req, file, cb) => {
     cb(new Error('Invalid file type. Only JPG files are allowed.'), false); 
   }
 };
+
 // Initialize upload with size limit (5MB)
 const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, 
   fileFilter: fileFilter 
 }).single('backgroundImage');
+
 // Route to handle background image upload
 apiRouter.post('/upload-background', (req, res) => {
   upload(req, res, (err) => {
@@ -54,6 +60,7 @@ apiRouter.post('/upload-background', (req, res) => {
     res.status(200).json({ message: 'Background image updated successfully', backgroundImage: imagePath });
   });
 });
+
 // Route to retrieve the background image
 apiRouter.get('/get-background', (req, res) => {
   const jpgImagePath = path.join(__dirname, '../../src/assets/login-bg.jpg'); 

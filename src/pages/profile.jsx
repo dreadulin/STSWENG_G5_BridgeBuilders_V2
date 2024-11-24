@@ -113,7 +113,6 @@ const Profile = () => {
         const formData = new FormData();
         formData.append("file", file);
   
-        // Send the file to the backend
         const response = await axios.post(`/api/profile/${caseNo}/upload`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -122,12 +121,11 @@ const Profile = () => {
   
         console.log("File uploaded successfully:", response.data);
   
-        // Display success alert and refresh the page
         alert("File uploaded successfully!");
-        window.location.reload(); // Refresh the page
+        window.location.reload(); 
       } catch (error) {
         console.error("Error uploading file:", error);
-        // Optionally, you can show an alert for error cases as well
+        
         alert("Error uploading file. Please try again.");
       }
     }
@@ -261,7 +259,7 @@ const Profile = () => {
               Program: {profileData.program}
             </h2>
 
-            <div className="flex items-center mt-12">
+            <div className="flex items-center mt-5">
               <h1 className="text-4xl mr-4">Intervention</h1>
               <div className="flex-grow h-1 bg-bb-violet"></div>
             </div>

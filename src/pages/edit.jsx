@@ -9,7 +9,7 @@ import IbangImpormasyon from "@/components/intakeForm/Form7";
 import Select from "@/components/ui/Select";
 import Goal from "@/components/ui/Goal";
 import Tooltip from "@/components/ui/Tooltip";
-import useProfile from "@/utils/hooks/useProfile";
+import useProfileEdit from "@/utils/hooks/useProfileEdit.js";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../axiosInstance.js";
@@ -108,7 +108,7 @@ const Edit = () => {
   const pictureRef = useRef(null);
   const { caseNo } = useParams();
   //const { profileData, setProfileData } = useProfile("Darryl Javier");
-  const {profileData, setProfileData, error, loading } = useProfile(caseNo);
+  const {profileData, setProfileData, error, loading } = useProfileEdit(caseNo);
   const [childData, setChildData] = useState(initialUser);
   const [image, setImage] = useState(profileData.picture);
   const [formError, setFormError] = useState({ open: false, errors: [] });
@@ -454,7 +454,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
-                  
+                  handleAddSubgoal={handleAddSubgoal}
                   image={logo2}
                   title="Mental"
                   goal={1}
