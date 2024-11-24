@@ -26,10 +26,38 @@
 
 Cypress.Commands.add("login", (username, password) => {
   cy.session(username, () => {
-    cy.visit("/");
     cy.get("#username").type(username);
     cy.get("#password").type(password);
-    cy.get("button").click();
+
+    cy.visit("/api/login", {
+      body: {
+        username: username,
+        password: password
+      }
+    });
+
+    cy.intercept("/post/")
+
+    cy.contains("Welcome").should("contain", username);
+  });
+});
+
+Cypress.Commands.add("loginAdmin", (username, password) => {
+  cy.session(username, () => {
+    cy.get("#username").type(username);
+    cy.get("#password").type(password);
+
+    cy.intercept("/api/signup", {
+      body: {
+        username: username,
+        password: password,
+        userType: 'superUser'
+      }
+    }).as('loginAdmin');
+
+    cy.wait('loginAdmin');
+
+
     cy.contains("Welcome").should("contain", username);
   });
 });
