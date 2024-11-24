@@ -1,7 +1,9 @@
 import { useEffect, useState, forwardRef, Fragment, useRef } from "react";
 import { cn } from "@/lib/utils";
 import Dropdown from "./Dropdown";
+import axios from "axios";
 
+// Existing goal service arrays
 const goal1Services = [
   "Assignment Help",
   "Tutorial",
@@ -42,12 +44,16 @@ const Goal = forwardRef(
       goal,
       goalsAchieved,
       handleGoalChange,
+      handleAddSubgoal,
       editMode = false,
       ...props
     },
     ref
   ) => {
     const [achievedGoals, setAchievedGoals] = useState(goalsAchieved);
+    const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [newSubgoal, setNewSubgoal] = useState(""); // State to hold the new subgoal input
+    const [additionalOptions, setAdditionalOptions] = useState([]); // State for new subgoals
     const progressRef = useRef(null);
 
     const goalList =
@@ -73,6 +79,25 @@ const Goal = forwardRef(
         progressRef.current.style.width = `${percentage}%`;
     }, [achievedGoals, goalList]);
 
+    const handleSaveClick = () => {
+      // Add the new subgoal to the additionalOptions state
+      if (newSubgoal) {
+        setAdditionalOptions((prev) => [...prev, newSubgoal]);
+    
+        // Pass the new subgoal to the parent component's function
+        handleAddSubgoal(newSubgoal);
+    
+        setNewSubgoal(""); // Clear the input field after saving
+        setShowModal(false); // Close the modal
+      }
+    };
+    
+
+    const handleCancel = () => {
+      setShowModal(false); // Close the modal without saving
+      setNewSubgoal(""); // Clear the input field
+    };
+
     return (
       <div
         ref={ref}
@@ -82,10 +107,11 @@ const Goal = forwardRef(
         )}
         {...props}
       >
+        {/* Existing Dropdown for Progress */}
         <Dropdown
-          title={"Progress"}
+          title={"Main Goals"}
           className="flex w-full bg-bb-white p-2 text-2xl transition-colors hover:bg-bb-violet hover:text-bb-white"
-          optionContainerClass="w-full h-52 "
+          optionContainerClass="w-full h-52"
         >
           {goalList.map((goal) => {
             const goalAchieved = achievedGoals.includes(goal);
@@ -119,6 +145,65 @@ const Goal = forwardRef(
             );
           })}
         </Dropdown>
+
+        {/* New Dropdown below Title */}
+        <Dropdown
+          title={"Subgoals"}
+          className="flex w-full bg-bb-white p-2 text-2xl transition-colors hover:bg-bb-violet hover:text-bb-white"
+          optionContainerClass="w-full"
+        >
+          {/* Positioned the Add button above the options with some spacing */}
+          <div className="w-full mb-4 flex justify-center items-center h-16">
+            <button
+              className="bg-bb-violet text-white py-2 px-4 rounded-lg text-sm font-semibold shadow-md hover:bg-bb-dark-purple hover:shadow-lg transition-all duration-200"
+              onClick={() => setShowModal(true)} // Show modal when clicked
+            >
+              Add New Subgoal
+            </button>
+          </div>
+
+          {/* Displaying the additional options below the "Add" button */}
+          <div className="w-full">
+            {additionalOptions.map((option, index) => (
+              <Fragment key={index}>
+                <span className="m-4 flex items-center">
+                  <h1 className="w-3/4 text-xl">{option}</h1>
+                </span>
+                <hr />
+              </Fragment>
+            ))}
+          </div>
+        </Dropdown>
+
+        {/* Modal for adding a new subgoal */}
+        {showModal && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg w-1/3">
+              <h2 className="text-xl mb-4">Add New Subgoal</h2>
+              <input
+                type="text"
+                value={newSubgoal}
+                onChange={(e) => setNewSubgoal(e.target.value)}
+                placeholder="Enter new subgoal"
+                className="w-full p-2 border border-gray-300 rounded-md mb-4"
+              />
+              <div className="flex justify-between">
+                <button
+                  onClick={handleCancel}
+                  className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveClick}
+                  className="bg-bb-violet text-white p-2 rounded-md hover:bg-bb-dark-purple"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center w-full flex-grow">
           <img src={image} className="object-contain" />

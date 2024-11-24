@@ -146,20 +146,45 @@ const Edit = () => {
   };
 
   const handleGoalChange = (event) => {
-    if (!profileData.goalsAchieved.includes(event.target.value)) {
-      setProfileData({
-        ...profileData,
-        goalsAchieved: [...profileData.goalsAchieved, event.target.value],
-      });
-    } else {
-      setProfileData({
-        ...profileData,
-        goalsAchieved: profileData.goalsAchieved.filter(
-          (goal) => goal != event.target.value
-        ),
-      });
-    }
+    const { value, checked } = event.target;
+  
+    setProfileData((prevState) => {
+      let updatedGoals = [...prevState.goalsAchieved];
+  
+      if (checked) {
+        // If goal is checked, add goal to goalsAchieved
+        updatedGoals = [...updatedGoals, value];
+      } else {
+        // If goal is unchecked, remove goal from goalsAchieved
+        updatedGoals = updatedGoals.filter((goal) => goal !== value);
+      }
+  
+      return {
+        ...prevState,
+        goalsAchieved: updatedGoals,  // Update the goalsAchieved array
+      };
+    });
   };
+
+  const handleAddSubgoal = (newSubgoal) => {
+    setProfileData((prevState) => {
+      // Ensure prevState.subgoals is always an array
+      const updatedSubgoals = Array.isArray(prevState.subgoals)
+        ? prevState.subgoals
+        : []; // Default to an empty array if it's not an array
+
+      // Check if newSubgoal is already in the array
+      if (!updatedSubgoals.includes(newSubgoal)) {
+        return {
+          ...prevState,
+          subgoals: [...updatedSubgoals, newSubgoal], // Add new subgoal
+        };
+      }
+      return prevState;
+    });
+  };
+
+  
 
   const handleSaveClick = async () => {
     setSubmitDisabled(true);
@@ -431,6 +456,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
+                  handleAddSubgoal={handleAddSubgoal}
                   image={logo2}
                   title="Mental"
                   goal={1}
@@ -443,6 +469,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
+                  handleAddSubgoal={handleAddSubgoal}
                   image={logo2}
                   title="Physical/Social"
                   goal={2}
@@ -455,6 +482,7 @@ const Edit = () => {
                   goalsAchieved={profileData.goalsAchieved}
                   editMode
                   handleGoalChange={handleGoalChange}
+                  handleAddSubgoal={handleAddSubgoal}
                   image={logo2}
                   title="Support to Caregiver"
                   goal={3}

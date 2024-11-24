@@ -37,6 +37,7 @@ const ChildSchema = new mongoose.Schema(
     picture: { type: String, default: "" },
     status: { type: String, default: "Active" },
     goalsAchieved: [{ type: String }],
+    subgoals: [{ type: String }]
   },
   { versionKey: false }
 );
