@@ -131,7 +131,7 @@ const Profile = () => {
     }
   };  
 
-  const handleArchiveFile = async (fileId) => {
+  const handleArchiveFile = async (caseNo,fileId) => {
     console.log("handling archive file");
     const confirmArchiveFile = window.confirm(
       "Are you sure you want to archive this file?"
@@ -348,26 +348,22 @@ const Profile = () => {
                     <div className="ml-auto flex items-center space-x-2">
                     {/* Archive Button */}
                     <button
-                        onClick={() => handleArchiveFile(file._id)} 
+                        onClick={() => handleArchiveFile(file.caseNo, file._id)} 
                         className="text-blue-600 hover:underline px-2 py-1 border border-blue-600 rounded-lg"
                       >
                         Archive
                       </button>
                       </div>
-
-                    
                   </li>
-      ))
-    ) : (
-      <p>No files attached yet.</p>
-    )}
-  </ul>
-</div>
-
-</div>
-          </div>
+                    ))
+            ) : (
+              <p>No files attached yet.</p>
+            )}
+        </ul>
         </div>
-      
+        </div>
+      </div>
+      </div>  
     </>
   );
 };
