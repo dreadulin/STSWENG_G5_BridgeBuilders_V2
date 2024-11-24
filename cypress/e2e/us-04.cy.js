@@ -1,11 +1,25 @@
 describe("US# 4", () => {
   it("Verify if the user can view children's archived files", () => {
     cy.login("gege", "akutami");
-    cy.url().should("contain", "dashboard");
-    cy.get("a").contains("/archive");
+    cy.visit('/overview')
+    cy.get('a[href="/archive"]').click()
+    
+    cy.get('button').contains('User Profiles').click()
+
+    cy.get('button').contains('Attached Files').click()
   });
 
-  it("Verify if admin can view both home care and children’s archived files", () => {});
+  it("Verify if admin can view both home care and children’s archived files", () => {
+    /*
+    cy.login("STSWENG", "stsweng");
+    cy.visit('/overview')
+    cy.get('a[href="/archive"]').click()
+
+    cy.get('button').contains('User Profiles').click()
+
+    cy.get('button').contains('Attached Files').click()
+    */
+  });
 });
 
 /*
