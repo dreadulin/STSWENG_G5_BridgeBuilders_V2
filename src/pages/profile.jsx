@@ -248,7 +248,7 @@ const Profile = () => {
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-lg text-gray-500">No subgoals added yet.</p>
+                      <p className="text-lg text-gray-500">No subgoals added</p>
                     )}
                   </div>
                 </div>
