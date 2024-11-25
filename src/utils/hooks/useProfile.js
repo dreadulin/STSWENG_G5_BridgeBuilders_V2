@@ -11,6 +11,7 @@ const initialState = {
   birthday: "",
   relihiyon: "",
   goalsAchieved: [],
+  subgoals: [],
   attachedFiles: [],
 };
 
@@ -20,8 +21,6 @@ const useProfile = (username) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // pseudo get user information (while no server yet)
-    //const user = Users.find((user) => user.pangalan == username);
     setLoading(true);
     const fetchUser = async () => {
       try {
@@ -41,6 +40,7 @@ const useProfile = (username) => {
             birthday: res.data.birthday,
             relihiyon: res.data.relihiyon,
             goalsAchieved: res.data.goalsAchieved,
+            subgoals: res.data.subgoals,
             attachedFiles: res.data.attachedFiles,
           });
         }
