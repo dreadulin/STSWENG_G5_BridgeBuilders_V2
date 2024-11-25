@@ -38,13 +38,10 @@ for (let i = 0; i < childCount; i++) {
 }
 
 const stats = makeStats(5, 3);
-console.log(stats);
 
 const users = await makeUsers();
-console.log(users);
 
 const families = makeFamilies(5);
-console.log(families);
 
 dotenv.config();
 

@@ -27,6 +27,8 @@ export async function makeUsers() {
   });
   */
   const users = [];
+  const usersLog = [];
+  console.log(users);
   
   for (let i = 0; i < validUserTypes.length; i++) {
     const value = validUserTypes[i];
@@ -37,9 +39,19 @@ export async function makeUsers() {
       password: hashedPassword,
       userType: value
     };
+
+    const newUserLog = {
+      username: username,
+      password: passwordMap.get(value),
+      userType: value
+    };
     
     users.push(newUser);
+    usersLog.push(newUserLog);
   }
+
+  console.log("Generated users:")
+  console.log(usersLog);
 
   return users;
 }
