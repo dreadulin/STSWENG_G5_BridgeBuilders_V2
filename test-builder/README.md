@@ -21,7 +21,8 @@ Once you run this command, the code automatically inserts data
 ```
 // .env
 
-MONGODB_URI=<your mongodb uri here>
+MONGODB_URI= mongodb+srv://<username>:<password>@bridgebase-db.ztsxd.mongodb.net/<database name>?retryWrites=true&w=majority&appName=bridgebase-db
+
 ```
 
 ## Change the number of children
