@@ -16,13 +16,13 @@ Then run the command below:
 ```
 npm run build
 ```
-Once you run this command, the code automatically inserts data
+Once you run this command, the code automatically inserts data.
+
+## .env file
+*test-builder* needs its own .env file. Below is the template.
 
 ```
-// .env
-
-MONGODB_URI= mongodb+srv://<username>:<password>@bridgebase-db.ztsxd.mongodb.net/<database name>?retryWrites=true&w=majority&appName=bridgebase-db
-
+MONGODB_URI = mongodb+srv://<username>:<password>@bridgebase-db.ztsxd.mongodb.net/<database name>?retryWrites=true&w=majority&appName=bridgebase-db
 ```
 
 ## Change the number of children
@@ -36,11 +36,5 @@ per child is randomized.
 13| const childCount = 5; // <--- change this to any number
 ```
 
-## Change the name of the collection 
-
-```
-// make-data.js
-
-48| const localDb = mongodb.db("populated-data");
-```
-
+## Change the name of the database
+The name of the database is in the `<database name>` of your MongoDB URI in the `.env`.
