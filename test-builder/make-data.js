@@ -1,12 +1,13 @@
-import resultNames from './readFiles.js'
-import { makeChild } from './make_children.js';
+import resultNames from "./readFiles.js";
+import { makeChild } from "./make_children.js";
 
-import { assignFather, assignMother } from './make-parent.js';
-import { chooseFromArray, makeFirstName, outputDocuments } from './util.js';
-import { assignSiblings } from './make-siblings.js';
+import { assignFather, assignMother } from "./make-parent.js";
+import { chooseFromArray, makeFirstName, outputDocuments } from "./util.js";
+import { makeStats } from "./make_stats.js";
+import { assignSiblings } from "./make-siblings.js";
 
-import mongoPkg from 'mongodb';
-import dotenv from 'dotenv';
+import mongoPkg from "mongodb";
+import dotenv from "dotenv";
 const { MongoClient, ServerApiVersion } = mongoPkg;
 
 // select how many children
@@ -27,39 +28,66 @@ for (let i = 0; i < childCount; i++) {
   parents.push(assignMother(child));
 
   const siblingArray = assignSiblings(child, children);
-  siblingArray.map(value => {
+  siblingArray.map((value) => {
     siblings.push(value);
   });
 
   children.push(child);
 }
 
+const stats = makeStats(5, 3);
+console.log(stats);
+
 dotenv.config();
 
 // mongodb time
-const mongodb = new MongoClient(process.env.MONGODB_URI,{
+const mongodb = new MongoClient(process.env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
-const localDb = mongodb.db("populated-data");
+try {
+  await mongodb.connect();
+  console.log("Successfully connected to Atlas.");
+} catch (err) {
+  console.log(err.stack);
+}
+
+const localDb = mongodb.db();
 const childCollection = localDb.collection("children");
 const parentCollection = localDb.collection("parents");
 const siblingCollection = localDb.collection("siblings");
+const statsCollection = localDb.collection("stats");
+
+console.log("Database name:", localDb.databaseName);
 
 try {
+  console.log("Inserting child collection data...");
   await childCollection.insertMany(children);
+
+  console.log("Inserting parent collection data...");
   await parentCollection.insertMany(parents);
+
+  console.log("Inserting sibling collection data...");
   await siblingCollection.insertMany(siblings);
 
-  const cursorChildren = childCollection.find();
-  const cursorParents = parentCollection.find();
-  const cursorSiblings = siblingCollection.find();
+  await statsCollection.countDocuments({}, { limit: 1 }).then((count) => {
+    if (count) {
+      console.log("Updating stats collection data...");
+      stats.map((value) => {
+        statsCollection.updateMany({}, {$set: value});
+      });
+    } else {
+      console.log("Inserting stats collection data...");
+      statsCollection.insertMany(stats);
+    }
+  });
+
+  console.log("Done inserting data.");
 } catch (e) {
+  console.log("Error!");
   console.error(e);
 }
-
-
