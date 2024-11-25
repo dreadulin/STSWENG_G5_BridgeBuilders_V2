@@ -2,27 +2,49 @@ import randomInteger from "random-int";
 
 export const randomStrLength = 10;
 
+/**
+ * randomStr.
+ */
 export function randomStr() {
   const length = randomStrLength;
-  let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
+
+  let result = '';
   let counter = 0;
+
   while (counter < length) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
     counter += 1;
   }
+
   return result;
 }
 
+/**
+ * randomListStr.
+ * @returns {}
+ */
 export function randomListStr() {
   return Array.from({length: 5}, () => { return randomStr(); })
 }
 
+/**
+ * chooseFromArray.
+ *
+ * @param {Array} array
+ * @returns {any} an element of the array
+ */
 export function chooseFromArray(array) {
   return array[randomInteger(array.length - 1)];
 }
 
+/**
+ * chooseManyFromArray.
+ *
+ * @param {} array
+ * @param {} length
+ */
 export function chooseManyFromArray(array, length) {
   const newArray = [];
   for (let i = 0; i < length; i++) {
@@ -96,9 +118,52 @@ export function makeFirstName(resultNames, kasarian) {
   return name;
 }
 
+/**
+ * outputDocuments.
+ *
+ * @param {} cursor
+ */
 export async function outputDocuments(cursor) {
   console.log("Childrens: ");
   for await (const item of cursor) {
     console.log(item);
   } 
+}
+
+/**
+ * generateRangeOfYearFromToday.
+ *
+ * @param {number} upper bound of the range (must be positive)
+ * @param {number} lower bound of the range (must be positive)
+ * @returns {number[]} an array that is a range of years:  
+ * [n - lower, n, n + upper] where n is current year.
+ */
+export function generateRangeOfYearFromToday(upper, lower) {
+  const today = new Date();
+  const rangeOfYear = [];
+
+  // clean out the negatives
+  upper = Math.abs(upper);
+  lower = Math.abs(lower);
+
+  while (upper > 0) {
+    const thisYear = today.getFullYear();
+    const year = thisYear + upper;
+
+    rangeOfYear.push(year);
+    
+    upper -= 1;
+  }
+
+  rangeOfYear.push(today.getFullYear());
+
+  while (lower > 0) {
+    const thisYear = today.getFullYear();
+    const year = thisYear - lower;
+
+    rangeOfYear.push(year);
+    
+    lower -= 1;
+  }
+  return rangeOfYear;
 }
