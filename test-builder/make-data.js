@@ -8,6 +8,7 @@ import { assignSiblings } from "./make-siblings.js";
 
 import mongoPkg from "mongodb";
 import dotenv from "dotenv";
+import { makeUsers } from "./make-users.js";
 const { MongoClient, ServerApiVersion } = mongoPkg;
 
 // select how many children
@@ -38,6 +39,9 @@ for (let i = 0; i < childCount; i++) {
 const stats = makeStats(5, 3);
 console.log(stats);
 
+const users = await makeUsers();
+console.log(users);
+
 dotenv.config();
 
 // mongodb time
@@ -61,6 +65,7 @@ const childCollection = localDb.collection("children");
 const parentCollection = localDb.collection("parents");
 const siblingCollection = localDb.collection("siblings");
 const statsCollection = localDb.collection("stats");
+const usersCollection = localDb.collection("users");
 
 console.log("Database name:", localDb.databaseName);
 
@@ -78,11 +83,20 @@ try {
     if (count) {
       console.log("Updating stats collection data...");
       stats.map((value) => {
-        statsCollection.updateMany({}, {$set: value});
+        statsCollection.updateMany({}, { $set: value });
       });
     } else {
       console.log("Inserting stats collection data...");
       statsCollection.insertMany(stats);
+    }
+  });
+
+  await usersCollection.countDocuments({}, { limit: 1 }).then((count) => {
+    if (count) {
+      console.log("Users already exists!");
+    } else {
+      console.log("Inserting users collection data...");
+      statsCollection.insertMany(users);
     }
   });
 
