@@ -1,3 +1,4 @@
+import e from "express";
 import randomInteger from "random-int";
 
 export const randomStrLength = 10;
@@ -165,5 +166,21 @@ export function generateRangeOfYearFromToday(upper, lower) {
     
     lower -= 1;
   }
+  return rangeOfYear;
+}
+
+export function generateRangeOfYear(oldestYear) {
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const rangeOfYear = [];
+  
+  while (oldestYear < thisYear) {
+    rangeOfYear.push(oldestYear);
+    oldestYear += 1;
+  }
+
+  rangeOfYear.push(thisYear);
+  console.log("rangeOfYear:", rangeOfYear)
+
   return rangeOfYear;
 }
