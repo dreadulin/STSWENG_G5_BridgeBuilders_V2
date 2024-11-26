@@ -180,9 +180,19 @@ const listahangRelihiyon = [
     "Buddhism"
   ]
 
+/**
+ * makeChild.
+ *
+ * @param {string} firstName - First name of the child
+ * @param {string} lastName - Last name of the child
+ * @param {string} kasarian - Gender of the child
+ */
 export function makeChild(firstName, lastName, kasarian) {
   const child = new Child();
   const today = new Date();
+  /**
+   * @type {string}
+   */
   const fullName = firstName + lastName;
 
   child.program = programList.at(randomInteger(1)); 
