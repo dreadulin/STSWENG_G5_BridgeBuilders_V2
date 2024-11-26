@@ -7,7 +7,7 @@ import {
 
 import randomInteger from 'random-int';
 
-import { File, ACTIVE, DELETED } from './make_file.js'
+import { File, statuses } from './make_file.js'
 
 export class Kategorya {
   constructor() {
@@ -231,7 +231,11 @@ export function makeChild(firstName, lastName, kasarian) {
   child.subgoals = ["Subgoal1", "Subgoal2", "Subgoal3"]
 
   child.attachedFiles = [
-    new File()
+    new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
+    new File(randomStr(), randomStr(), 1, chooseFromArray(statuses)),
+    new File(randomStr(), randomStr(), 2, chooseFromArray(statuses)),
+    new File(randomStr(), randomStr(), 3, chooseFromArray(statuses)),
+    new File(randomStr(), randomStr(), 4, chooseFromArray(statuses))
   ]
 
   return child; 
