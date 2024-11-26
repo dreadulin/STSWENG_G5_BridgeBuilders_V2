@@ -6,6 +6,8 @@ import {
 import Child from "../../schemas/ChildSchema.js";
 import Father from "../../schemas/FatherSchema.js";
 import Mother from "../../schemas/MotherSchema.js";
+import Sibling from "../../schemas/SiblingSchema.js";
+import Family from "../../schemas/FamilySchema.js";
 import express from "express";
 import * as Yup from "yup";
 import imageUploader from "../../src/utils/imageUploader.js";
@@ -286,6 +288,201 @@ apiRouter.post("/profile/:caseNo/upload", upload.single("file"), async (req, res
     res.status(500).send("Error uploading file");
   }
 });
+
+// Add field to database
+apiRouter.post('/addField', async (req, res) => {
+  const { fieldName, fieldSection } = req.body;
+
+  console.log("Name: ", fieldName);
+  console.log("Section: ", fieldSection);
+
+  try {
+    const fieldValue = "";
+
+    // Check which schema (model) to update based on sectionActive
+    let schemaToUpdate;
+
+    switch (fieldSection) {
+      case 's1':
+        schemaToUpdate = Child;
+        break;
+      case 's2':
+        schemaToUpdate = Child;
+        break;
+      case 's3':
+        schemaToUpdate = Mother;
+        break;
+      case 's4':
+        schemaToUpdate = Father;
+        break;
+      case 's5':
+        schemaToUpdate = Sibling;
+        break;
+      case 's6':
+        schemaToUpdate = Child;
+        break;
+      case 's7':
+        schemaToUpdate = Family;
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid section specified" });
+    }
+
+    // Find the document in the appropriate collection (schema)
+    const document = await schemaToUpdate.findOne({});
+
+    if (!document) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    // Ensure the dynamicFields array is initialized (if not already)
+    if (!document.dynamicFields) {
+      document.dynamicFields = [];
+    }
+
+    // Add the new field to the dynamicFields array
+    document.dynamicFields.push({
+      fieldName: fieldName,
+      fieldValue: fieldValue,
+    });
+
+    // Save the updated document
+    await document.save();
+
+    return res.status(200).json({ message: "Field added successfully" });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "An error occurred while adding the field" });
+  }
+});
+
+
+
+
+// Get the newly added fields
+apiRouter.get('/getSectionData', async (req, res) => {
+  const { section, fieldName } = req.query; // Assume section identifies the document and fieldName specifies the desired dynamic field
+  console.log('Request received for /api/getSectionData with:', req.query);
+
+  try {
+    let result;
+
+     // Adjust query to handle section properly
+    if (section === 's3') {
+      result = await Mother.findOne({ section: req.query.section }).select('dynamicFields');
+    } else {
+      result = await Child.findOne({ section: req.query.section }).select('dynamicFields');
+    }
+
+    console.log('Database result:', result);
+
+    if (!result || !result.dynamicFields || result.dynamicFields.length === 0) {
+      return res.status(404).json({ message: 'Field not found' });
+    }
+
+    res.json(result.dynamicFields); // Return the matched field(s)
+  } catch (error) {
+    console.error("Error fetching dynamic field:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
+
+
+
+
+
+
+// Endpoint to fetch child data
+apiRouter.get('/getChildData', async (req, res) => {
+  try {
+    const childData = await Child.findOne(); // Or another query to fetch the data
+    res.json(childData);
+  } catch (error) {
+    res.status(500).send('Error fetching child data');
+  }
+});
+
+
+ 
+/*
+
+apiRouter.post('/addField', async (req, res) => {
+  const { fieldName, fieldValue, fieldSection } = req.body;
+
+  try {
+    // Ensure fieldValue defaults to an empty string if not provided
+    const value = fieldValue || "";
+
+    // Find all children (or add your condition to filter specific children)
+    const children = await Child.find({});
+
+    if (!children || children.length === 0) {
+      return res.status(404).json({ message: "No children found" });
+    }
+
+    // Iterate over all children and add the new field
+    for (let child of children) {
+      // Ensure dynamicFields is initialized if it's not defined
+      if (!child.dynamicFields) {
+        child.dynamicFields = []; // Initialize as an empty array if not present
+      }
+
+      // Add the new dynamic field as an object with fieldName and fieldValue
+      child.dynamicFields.push({
+        fieldName: fieldName,
+        fieldValue: value,
+        fieldSection: fieldSection
+      });
+
+      await child.save();
+    }
+
+    return res.status(200).json({ message: "Field added successfully to all children" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "An error occurred while adding the field" }); 
+  }
+});
+
+*/
+
+
+
+apiRouter.get("/api/getFields", async (req, res) => {
+  try {
+    const fields = await Child.find(); // Replace `FieldModel` with your database model
+    res.json({ fields });
+  } catch (error) {
+    console.error("Error fetching fields:", error);
+    res.status(500).json({ message: "Failed to fetch fields" });
+  }
+});
+
+
+apiRouter.get("/s1-fields", async (req, res) => {
+  try {
+    const fields = await Child.find(); // Fetch all fields for Section 1
+    res.json(fields); // Send the fields as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching Section 1 fields", error: err });
+  }
+});
+
+apiRouter.get("/s2-fields", async (req, res) => {
+  try {
+    const fields = await Child.find(); // Fetch all fields for Section 1
+    res.json(fields); // Send the fields as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching Section 1 fields", error: err });
+  }
+});
+
+
+
 
 
 export default apiRouter;

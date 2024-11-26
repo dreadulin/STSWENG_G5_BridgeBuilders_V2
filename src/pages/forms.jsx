@@ -6,7 +6,7 @@ import Kapatid from "@/components/intakeForm/Form5";
 import Dokumento from "@/components/intakeForm/Form6";
 import IbangImpormasyon from "@/components/intakeForm/Form7";
 import Appbar from "@/components/ui/Appbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Waypoint } from "react-waypoint";
 import axios from "../axiosInstance.js";
 import childSchema from "../../schemas/FormValidationSchema.js";
@@ -105,6 +105,21 @@ const sections = [
 
 const Forms = () => {
   const [childData, setChildData] = useState(initialUser);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [newFieldName, setNewFieldName] = useState("");  // Current field input
+  const [fields, setFields] = useState([]);  // List of fields
+  const [formFields, setFormFields] = useState({
+    s1: [], 
+    s2: [],
+    s3: [],
+    s4: [],
+    s5: [], 
+    s6: [],
+    s7: [],
+  });
+
+  const [currentSectionData, setCurrentSectionData] = useState(null);
   const [sectionActive, setSectionActive] = useState("s1");
   const [error, setError] = useState({ open: false, errors: [] });
   const [status, setStatus] = useState({
@@ -416,9 +431,75 @@ const Forms = () => {
   };
 
   const handleEditForm = () => {
-    console.log("Edit button clicked!");
+    console.log("handling edit digital form...");
+    setIsModalOpen(true); 
+    
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false); 
+  };
+
+  const handleAdd = () => {
+    console.log("handling add field into digital form...");
+    setAddModalOpen(true); 
+  };
+
+  const closeAddModal = () => {
+    setAddModalOpen(false); 
+  };
+
+  const handleFieldSubmit = async () => {
+    if (!newFieldName.trim()) {
+      alert("Field name cannot be empty");
+      return;
+    }
+  
+    if (!formFields[sectionActive]) {
+      alert("Invalid section selected");
+      return;
+    }
+  
+    const updatedFields = [...formFields[sectionActive]];
+    updatedFields.push({ fieldName: newFieldName, value: "" });
+  
+    setFormFields({
+      ...formFields,
+      [sectionActive]: updatedFields,
+    });
+  
+    alert("Field added successfully!");
+    setNewFieldName(""); 
+    closeAddModal(); 
+  
+    try {
+      const addResponse = await axios.post('/api/addField', {
+        fieldName: newFieldName,
+        fieldSection: sectionActive, 
+      });
+      console.log('Field added:', addResponse.data);
+  
+ 
+      const fetchResponse = await axios.get('/api/getSectionData', {
+        params: {
+          section: sectionActive, 
+          fieldName: newFieldName, 
+        },
+      });
+  
+      console.log('Fetched field data:', fetchResponse.data);
+  
+  
+    } catch (error) {
+      console.error("Error during field submission:", error);
+      alert("Error adding or fetching the field from the database");
+    }
+  };
+
+  const handleDelete = () => {
+    console.log("handling delete field from digital form...");
+  };
+  
   return (
     <>
       <Appbar />
@@ -434,6 +515,120 @@ const Forms = () => {
             </a>
           </Tooltip>
         </div>
+
+         {/* Main Modal */}
+         {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-bb-purple text-bb-white p-6 rounded-lg shadow-lg border-4 border-white max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          
+          {/* Close Button */}
+          <button
+            className="absolute top-4 right-4 text-bb-white hover:text-bb-violet text-4xl"
+            onClick={closeModal}
+          >
+            ×
+          </button>
+
+          {/* Modal Content */}
+          {/* Dynamically render based on active section */}
+          {sectionActive === "s1" && childData && (
+            <PangunahingImpormasyon
+              childData={childData}  
+              style={{ fontSize: '14px' }}  
+            />
+          )}
+          {sectionActive === "s2" && childData && (
+            <PamilyaProblema
+              childData={childData}  
+              formFields={formFields}
+              sectionActive={sectionActive}
+              style={{ fontSize: '14px' }}
+            />
+          )}
+          {sectionActive === "s3" && childData && (
+            <Nanay
+              childData={childData}  
+              formFields={formFields}
+              sectionActive={sectionActive}
+              style={{ fontSize: '14px' }}
+            />
+          )}
+          {sectionActive === "s4" && childData && (
+            <Tatay
+              childData={childData}  
+              style={{ fontSize: '14px' }}
+            />
+          )}
+          {sectionActive === "s5" && childData && (
+            <Kapatid
+              childData={childData}  
+              style={{ fontSize: '14px' }}
+            />
+          )}
+          {sectionActive === "s6" && childData && (
+            <Dokumento
+              childData={childData}  
+              style={{ fontSize: '14px' }}
+            />
+          )}
+          {sectionActive === "s7" && childData && (
+            <IbangImpormasyon
+              childData={childData}  
+              style={{ fontSize: '14px' }}
+            />
+          )}
+
+          {/* Add and Delete Buttons  */}
+      <div className="flex justify-end space-x-4 p-4 mt-auto">
+        <button
+          className="bg-violet-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          onClick={handleAdd}  
+        >
+          Add
+        </button>
+        <button
+          className="bg-violet-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          onClick={handleDelete}  
+        >
+          Delete
+        </button>
+      </div>
+
+
+            {/* Add Field Modal */}
+      {addModalOpen && (  
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-bb-purple text-bb-white p-6 rounded-lg shadow-lg border-4 border-white max-w-sm w-full">
+            <button
+              className="absolute top-4 right-4 text-bb-white hover:text-bb-violet text-4xl"
+              onClick={closeAddModal}
+            >
+              ×
+            </button>
+            <h2 className="text-3xl mb-4">Add New Field</h2>
+            <input
+              type="text"
+              value={newFieldName}
+              onChange={(e) => setNewFieldName(e.target.value)}
+              placeholder="Field Name"
+              className="w-full p-2 mb-4 border border-white rounded text-violet-500"
+            />
+            <div className="flex justify-end">
+              <button
+                className="bg-violet-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                onClick={handleFieldSubmit}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+
+      </div>
+    </div>
+    )}
 
           {sections.map((section, index) => (
             <div
@@ -502,11 +697,19 @@ const Forms = () => {
                   {index === 1 && (
                     <PamilyaProblema
                       childData={childData}
+                      formFields={formFields}
+                      sectionActive={sectionActive}
+                      setFormFields={setFormFields}
                       setChildData={setChildData}
                     />
                   )}
                   {index === 2 && (
-                    <Nanay childData={childData} setChildData={setChildData} />
+                    <Nanay childData={childData} 
+                    setChildData={setChildData}
+                    formFields={formFields}
+                    sectionActive={sectionActive}
+                    setFormFields={setFormFields}
+                    />
                   )}
                   {index === 3 && (
                     <Tatay childData={childData} setChildData={setChildData} />
@@ -535,6 +738,7 @@ const Forms = () => {
           ))}
         </div>
       </div>
+
       <FormError
         isOpen={error.open}
         errors={error.errors}

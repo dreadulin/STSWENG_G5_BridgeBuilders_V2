@@ -47,6 +47,13 @@ const ChildSchema = new mongoose.Schema(
         fileStatus: { type: String, default: "Active" }, // "Active" or "Deleted"
       },
     ],
+    dynamicFields: {
+      type: [{
+        fieldName: String,
+        fieldValue: String,
+      }],
+      default: [],
+    },
   },
   { versionKey: false }
 );

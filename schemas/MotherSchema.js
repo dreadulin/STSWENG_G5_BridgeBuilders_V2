@@ -18,6 +18,13 @@ const MotherSchema = new mongoose.Schema(
     skillTraining: { type: String }, //skill training attended
     skills: { type: String },
     dokumento: [{ type: String }],
+    dynamicFields: {
+      type: [{
+        fieldName: String,
+        fieldValue: String,
+      }],
+      default: [],
+    },
   },
   { versionKey: false }
 );

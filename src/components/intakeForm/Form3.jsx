@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Select from "@/components/ui/Select";
+import axios from "axios";
 
 const documentList = [
   "National I.D",
@@ -20,7 +21,7 @@ const antasList = [
   { value: "ALS", name: "antasNgPaaralan" },
 ];
 
-const Nanay = ({ childData, setChildData }) => {
+const Nanay = ({ childData, setChildData, formFields, sectionActive, setFormFields }) => {
   const [otherDocuments, setOtherDocuments] = useState([]);
   const otherKasarianRef = useRef(null);
 
@@ -87,6 +88,29 @@ const Nanay = ({ childData, setChildData }) => {
 
     setOtherDocuments(documentList);
   };
+
+  const handleFieldChange = (fieldName, newValue) => {
+    const updatedFields = formFields[sectionActive]
+      ? formFields[sectionActive].map((field) => {
+          if (field.fieldName === fieldName) {
+            return { ...field, fieldValue: newValue }; // Update the fieldValue if fieldName matches
+          }
+          return field;
+        })
+      : [];
+  
+    // If the field doesn't exist in the array, add it
+    if (!updatedFields.some(field => field.fieldName === fieldName)) {
+      updatedFields.push({ fieldName, fieldValue: newValue });
+    }
+  
+    // Update formFields correctly
+    setFormFields({
+      ...formFields,
+      [sectionActive]: updatedFields,
+    });
+  };
+  
 
   return (
     <>
@@ -350,6 +374,28 @@ const Nanay = ({ childData, setChildData }) => {
             />
           </span>
         </div>
+
+         {/* Render input fields */}
+                {formFields[sectionActive]?.map((field, index) => (
+          <div key={field.fieldName} className="flex items-center w-full" style={{ fontSize: "18px" }}>
+            <div className="flex flex-col w-1/2 mr-2">
+              <label htmlFor={field.fieldName} className="text-sm mb-1 ml-1">
+                {field.fieldName}
+              </label>
+              <input
+                  type="text"
+                  placeholder={field.fieldName}
+                  name={`${sectionActive}_${field.fieldName}`} // Append section to field name for uniqueness
+                  className="p-2 border-bb-violet border-2 rounded-lg w-full"
+                  id={`${sectionActive}_${field.fieldName}`} // Same as above for the id
+                  value={field.fieldValue || ""}
+                  onChange={(e) => handleFieldChange(field.fieldName, e.target.value)}
+                />
+
+            </div>
+          </div>
+        ))}
+
       </div>
     </>
   );
