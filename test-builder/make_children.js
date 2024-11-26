@@ -183,14 +183,7 @@ export function makeChild(firstName, lastName, kasarian) {
     + randomInteger(1, 12).toString()
     + randomInteger(1, 25); //petsa ng kapanganakan
 
-  child.relihiyon = [
-    "Roman Catholic",
-    "Christianity",
-    "Born Again",
-    "Iglesia ni Kristo",
-    "Islam",
-    "Buddhism"
-  ].at(randomInteger(5));
+  child.relihiyon = listahangRelihiyon.at(randomInteger(5));
 
   child.antasNgPaaralan = piliAntas(child.edad);
   child.palayaw = firstName.split(' ')[0];
