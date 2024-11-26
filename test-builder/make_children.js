@@ -7,7 +7,7 @@ import {
 
 import randomInteger from 'random-int';
 
-import File from './make_file.js'
+import { File, ACTIVE, DELETED } from './make_file.js'
 
 export class Kategorya {
   constructor() {
