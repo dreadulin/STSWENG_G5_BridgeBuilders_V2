@@ -2,7 +2,8 @@ import {
   randomStr, 
   randomListStr, 
   chooseFromArray, 
-  chooseManyFromArray 
+  chooseManyFromArray, 
+  generateRangeOfYear
 } from './util.js';
 
 import randomInteger from 'random-int';
@@ -114,7 +115,7 @@ export const antasList = [
 ];
 
 export const programList = [
-  "home care",
+  "Home Care",
   "Community Based Program"
 ];
 
@@ -190,14 +191,21 @@ const listahangRelihiyon = [
 export function makeChild(firstName, lastName, kasarian) {
   const child = new Child();
   const today = new Date();
+
   /**
    * @type {string}
    */
   const fullName = firstName + lastName;
 
   child.program = programList.at(randomInteger(1)); 
-  child.date = today;
-  // child.caseNo = ; //unique id
+  child.date = new Date();
+  child.date.setFullYear(
+    chooseFromArray(
+      generateRangeOfYear(parseInt(process.env.OLDEST_YEAR))
+    )
+  )
+
+  // child.caseNo = randomInteger(); //unique id
   child.pangalan = fullName;
   child.edad = randomInteger(1, 12);
   child.birthday = 
