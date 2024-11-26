@@ -23,6 +23,17 @@ Once you run this command, the code automatically inserts data.
 
 ```
 MONGODB_URI = mongodb+srv://<username>:<password>@bridgebase-db.ztsxd.mongodb.net/<database name>?retryWrites=true&w=majority&appName=bridgebase-db
+CHILD_COUNT = # Number of children to be generated
+DELETE_DATA = # 1 - delete existing data
+              # 0 - do not delete existing data. The new data will append on top of the existing data instead of replacing them
+
+NUM_LABELS = # Number of labels
+NUM_STATS = # Number of stats
+NUM_FAMILIES = # Number of families
+
+OLDEST_YEAR = # For generating range of years from OLDEST_YEAR to current year
+                   # e.g. [2021, 2022, 2023, 2024]
+                   # This is for child.date and stat.date
 ```
 
 ## Change the number of children
