@@ -168,6 +168,18 @@ export function piliAntas(edad) {
   return antas
 }
 
+/**
+ * List of religions 
+ * */
+const listahangRelihiyon = [
+    "Roman Catholic",
+    "Christianity",
+    "Born Again",
+    "Iglesia ni Kristo",
+    "Islam",
+    "Buddhism"
+  ]
+
 export function makeChild(firstName, lastName, kasarian) {
   const child = new Child();
   const today = new Date();
