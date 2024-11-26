@@ -78,7 +78,7 @@ const Archive = () => {
         }
 
         const response = await axios.get(
-          "http://localhost:3002/api/current-user",
+          "/api/current-user",
           {
             headers: {
               Authorization: `Bearer ${token}`,

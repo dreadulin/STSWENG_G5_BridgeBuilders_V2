@@ -20,7 +20,7 @@ const Appbar = () => {
         console.error('No token found');
         return;
       }
-      const response = await axios.get('http://localhost:3002/api/current-user', {
+      const response = await axios.get('/api/current-user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
