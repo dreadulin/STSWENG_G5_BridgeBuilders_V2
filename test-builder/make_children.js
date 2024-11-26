@@ -7,6 +7,8 @@ import {
 
 import randomInteger from 'random-int';
 
+import File from './make_file.js'
+
 export class Kategorya {
   constructor() {
     this.pangalan = undefined;
@@ -94,6 +96,12 @@ export class Child {
     
     /** @type {string[]} */
     this.goalsAchieved = undefined;
+    
+    /* @type {string[]} */
+    this.subgoals = undefined;
+
+    /* @type {File[]} */
+    this.attachedFiles = undefined;
   }
 }
 
