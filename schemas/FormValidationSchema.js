@@ -304,7 +304,6 @@ export const editChildSchema = Yup.object().shape({
     ),
   goalsAchieved: Yup.array().of(Yup.string()),
   subgoals: Yup.array().of(Yup.string()),
-
 });
 
 export const editParentSchema = Yup.object().shape({

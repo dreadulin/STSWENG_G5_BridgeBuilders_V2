@@ -100,6 +100,7 @@ apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
 
     if (result.modifiedCount === 0) {
       return res.status(404).json({ error: "Profile not found or no changes made" });
+
     }
 
     return res.status(200).json({ message: "Subgoal saved successfully!" });
@@ -111,7 +112,42 @@ apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
   }
 });
 
-//archive or unarchive profile
+
+
+apiRouter.post("saveSubgoal/:caseNo", async (req, res) => {
+  const caseNo = req.params.caseNo;
+  
+  const { subgoal } = req.body;
+  
+  if (!subgoal) {
+    return res.status(400).json({ error: "Subgoal missing" });
+  }
+
+  if (!caseNo) {
+    return res.status(400).json({ error: "Case number is required" });
+  }
+
+  try {
+    // Update the subgoals directly in the database without fetching the profileData
+    const result = await Child.updateOne(
+      { _id: caseNo },
+      { $push: { subgoals: subgoal } }  // This will push the new subgoal into the array
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ error: "Profile not found or no changes made" });
+    }
+
+    return res.status(200).json({ message: "Subgoal saved successfully!" });
+
+  } catch (err) {
+    
+    console.error("Error while saving subgoal:", err);
+    return res.status(500).json({ error: "Failed to save subgoal" });
+  }
+});
+
+// archive or unarchive profile
 apiRouter.post("/archiveProfile/:caseNo", async (req, res) => {
   console.log("Editing case archive status...");
   const caseNo = (req.params.caseNo);
@@ -217,7 +253,7 @@ apiRouter.post("/archiveFile/:caseNo/:fileId", async (req, res) => {
 
   const caseNo = req.params.caseNo;   
   const fileId = req.params.fileId;   
-
+  
   try {
     // Find the profile document 
     const currentDocument = await Child.findById(caseNo);
@@ -243,6 +279,61 @@ apiRouter.post("/archiveFile/:caseNo/:fileId", async (req, res) => {
   } catch (error) {
     console.error("Error updating file archive status:", error);
     res.status(500).send("Error updating file archive status");
+  }
+});
+
+// Display filtered archived files
+apiRouter.get("/archivedFiles", async (req, res) => {
+  try {
+    const { program, year, edad, kasarian } = req.query;
+
+    let query = {};
+
+    if (program) {
+      query.program = program;
+    }
+
+    if (year) {
+      query.yearAdmitted = year;
+    }
+
+    if (edad) {
+      const [minAge, maxAge] = edad.split("-").map(Number);
+      query.edad = { $gte: minAge, $lte: maxAge };
+    }
+
+    if (kasarian) {
+      query.kasarian = { $regex: kasarian, $options: "i" };
+    }
+
+    const allProfiles = await Child.find(query);
+
+    if (!allProfiles || allProfiles.length === 0) {
+      return res.status(200).json([]); // Return an empty array
+    }
+
+    let archivedFiles = [];
+
+    allProfiles.forEach(profileData => {
+      const archived = profileData.attachedFiles
+        .filter(file => file.fileStatus === "Deleted")
+        .map(file => ({
+          ...file.toObject(),
+          caseNo: profileData._id,
+          fileId: file._id,
+          pangalan: profileData.pangalan,
+          edad: profileData.edad,
+          kasarian: profileData.kasarian,
+        }));
+
+      archivedFiles = archivedFiles.concat(archived);
+    });
+
+    // Return the filtered archived files
+    res.status(200).json(archivedFiles);
+  } catch (error) {
+    console.error("Error retrieving archived files:", error);
+    res.status(500).send("Error retrieving archived files");
   }
 });
 

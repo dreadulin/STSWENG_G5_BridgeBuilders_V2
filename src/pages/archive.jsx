@@ -11,6 +11,7 @@ import { MdEditNote, MdDeleteForever, MdEditSquare } from "react-icons/md";
 import search from "@/assets/search.png";
 import filter from "@/assets/filter.png";
 import UserCard from "@/components/custom/UserCard";
+import FileCard from "@/components/custom/FileCard"
 import Appbar from "@/components/ui/Appbar";
 import axios from "../axiosInstance.js";
 import { jwtDecode } from "jwt-decode";
@@ -32,6 +33,8 @@ const Archive = () => {
   const [deletedUsers, setUsers] = useState([]);
   const [filters, setFilters] = useState(defaultFilters);
   const [searchQuery, setSearchQuery] = useState("");
+  const [displayFiles, setDisplayFiles] = useState(""); 
+  const [deletedFiles, setFiles] = useState([]);
 
   const fetchData = async (searchQuery) => {
     try {
@@ -68,6 +71,40 @@ const Archive = () => {
     }
   };
 
+  const fetchFiles = async (filters) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      let edadFilter = {};
+      if (filters.edad) {
+        const [minAge, maxAge] = filters.edad.split("-").map(Number);
+        edadFilter = {
+          minAge,
+          maxAge,
+        };
+      }
+  
+      const response = await axios.get("/api/archivedFiles", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          program: activeCategory,  
+          year: activeYear,        
+          edad: filters.edad,      
+          kasarian: filters.kasarian, 
+        },
+      });
+      setFiles(response.data); 
+    } catch (error) {
+      console.error("Error fetching files:", error);
+    }
+  };
+  
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -154,8 +191,12 @@ const Archive = () => {
   }, []);
 
   useEffect(() => {
-    fetchData(searchQuery);
-  }, [activeCategory, activeYear, filters, searchQuery]);
+    if (!displayFiles) {
+      fetchData(searchQuery);
+    } else {
+      fetchFiles( filters); 
+    }
+  }, [activeCategory, activeYear, filters, searchQuery, displayFiles]);
 
   //Fetch functions
   const fetchYears = async () => {
@@ -180,7 +221,25 @@ const Archive = () => {
     }
   };
 
-
+  const handleArchiveFile = async (caseNo, fileId) => {
+    console.log("Handling unarchive file");
+  
+    const confirmUnarchiveFile = window.confirm(
+      "Are you sure you want to unarchive this file?"
+    );
+  
+    if (confirmUnarchiveFile) {
+      try {
+        await axios.post(`/api/archiveFile/${caseNo}/${fileId}`);
+        console.log("File unarchived successfully");
+      } catch (error) {
+        console.error("Error unarchiving file: ", error);
+      }
+    } else {
+      console.log("Unarchive Cancelled");
+    }
+  };
+  
   //Handler functions
   const handleCategoryToggle = (category) => {
     setActiveCategory(category);
@@ -206,12 +265,28 @@ const Archive = () => {
     setSearchQuery(event.target.value);
   };
 
+  const toggleDisplayFiles = () => {
+    setDisplayFiles((prev) => !prev);
+  };
+
   return (
     <>
       <Appbar />
       {/* Main Content */}
       <div className="bg-white p-6 rounded-lg w-full">
-        <h1 className="header">Archive</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="header">Archive</h1>
+          
+          {/* Button for Profile/File */}
+          <Button 
+            className="bg-bb-violet text-white" 
+            size="lg" 
+            onClick={toggleDisplayFiles}
+          >
+            {displayFiles ? "Attached Files" : "User Profiles"}
+          </Button>
+        </div>
+
         <hr className="my-4 border-t-2 border-bb-violet" />
         {/* Tabs */}
         <div className="mb-2 text-lg font-bold text-bb-violet">Category:</div>
@@ -378,21 +453,43 @@ const Archive = () => {
           </Popover>
         </div>
 
-        {/* Client List */}
-        <div className="space-y-4">
-          {deletedUsers.map((user, index) => (
-            <UserCard
-              key={index}
-              name={user.pangalan}
-              ageRange={user.edad}
-              gender={user.kasarian}
-              year={user.yearAdmitted}
-              category={user.program}
-              profileLink={`/profile/${user._id}`}
-              avatar={user.picture}
-            />
-          ))}
-        </div>
+        {/* Display Profile List or File List */}
+        {!displayFiles ? (
+          <div className="space-y-4">
+            {deletedUsers.map((user, index) => (
+              <UserCard
+                key={index}
+                name={user.pangalan}
+                ageRange={user.edad}
+                gender={user.kasarian}
+                year={user.yearAdmitted}
+                category={user.program}
+                profileLink={`/profile/${user._id}`}
+                avatar={user.picture}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {deletedFiles.map((file, index) => {
+              console.log('File:', file);  // Check if file has the required properties
+              return (
+                <FileCard
+                  key={index}
+                  fileName={file.fileName}
+                  fileType={file.fileType}
+                  uploadDate={new Date(file.uploadDate).toLocaleDateString()}
+                  caseNo={file.caseNo}
+                  fileId={file.fileId}
+                  pangalan={file.pangalan}
+                  edad={file.edad}
+                  kasarian={file.kasarian}
+                  onUnarchive={() => handleArchiveFile(file.caseNo, file._id)}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </>
   );
