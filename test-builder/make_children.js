@@ -228,6 +228,7 @@ export function makeChild(firstName, lastName, kasarian) {
   child.yearAdmitted = 2024;
   child.status = chooseFromArray(["Active", "Inactive"]);
   child.goalsAchieved = ["Goal1", "Goal2", "Goal3"] // : [{ type: String }],
+  child.subgoals = ["Subgoal1", "Subgoal2", "Subgoal3"]
 
   return child; 
 }
