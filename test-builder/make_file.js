@@ -1,11 +1,14 @@
 export const ACTIVE = "Active";
 export const DELETED = "Deleted";
+export const statuses = [ACTIVE, DELETED];
 
 /**
- * File
+ * An epic file
  */
 export class File {
   /**
+   * @constructor
+   *
    * Created a file
    * @param {string} filename - Filename of the file 
    * @param {string} fileType - type of file (e.g., "image/png", "application/pdf")
