@@ -16,20 +16,27 @@ const Profile = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const handleArchiveClick = async () => {
-    console.log("handling archive");
-    const confirmArchive = window.confirm(
-      "Are you sure you want to archive this profile?"
-    );
-    if (confirmArchive) {
+    console.log("Handling archive/unarchive");
+  
+    const isArchiving = profileData.status === "Active"; 
+    const actionText = isArchiving
+      ? "Are you sure you want to archive this profile?"
+      : "Are you sure you want to unarchive this profile?"; 
+  
+    const cancelText = isArchiving ? "Archive cancelled" : "Unarchive cancelled";
+  
+    const confirmAction = window.confirm(actionText);
+    if (confirmAction) {
       try {
         await axios.post(`/api/archiveProfile/${caseNo}`);
       } catch (error) {
         console.error("Error saving profile:", error);
       }
     } else {
-      console.log("Archive cancelled");
+      console.log(cancelText);
     }
   };
+
 
   const handleDownloadClick = async () => {
     const doc = new jsPDF();
@@ -241,13 +248,23 @@ const Profile = () => {
                   </span>
                 </a>
               </Tooltip>
-              <Tooltip tooltipText={"Archive"} className=" mr-6 ml-6 ">
+              {profileData?.status === "Active" ? (
+              <Tooltip tooltipText={"Archive"} className="mr-6 ml-6">
                 <a href={`/profile/${caseNo}`} onClick={handleArchiveClick}>
                   <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer">
                     folder_open
                   </span>
                 </a>
               </Tooltip>
+              ) : (
+              <Tooltip tooltipText={"Unarchive"} className="mr-6 ml-6">
+                <a href={`/profile/${caseNo}`} onClick={handleArchiveClick}>
+                  <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer">
+                    unarchive
+                  </span>
+                </a>
+              </Tooltip>
+              )}
               <Tooltip tooltipText={"Download"} className=" mr-6 ml-6 ">
                 <a onClick={handleDownloadClick}>
                   <span className="material-symbols-outlined text-3xl md:text-5xl text-center text-bb-purple hover:text-bb-violet cursor-pointer"> 

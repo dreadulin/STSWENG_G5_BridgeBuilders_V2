@@ -12,6 +12,7 @@ const initialState = {
   relihiyon: "",
   goalsAchieved: [],
   attachedFiles: [],
+  status: "",
 };
 
 const useProfile = (username) => {
@@ -42,6 +43,7 @@ const useProfile = (username) => {
             relihiyon: res.data.relihiyon,
             goalsAchieved: res.data.goalsAchieved,
             attachedFiles: res.data.attachedFiles,
+            status: res.data.status,
           });
         }
       } catch (err) {
