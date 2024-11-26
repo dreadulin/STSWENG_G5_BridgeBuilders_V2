@@ -230,6 +230,10 @@ export function makeChild(firstName, lastName, kasarian) {
   child.goalsAchieved = ["Goal1", "Goal2", "Goal3"] // : [{ type: String }],
   child.subgoals = ["Subgoal1", "Subgoal2", "Subgoal3"]
 
+  child.attachedFiles = [
+    new File()
+  ]
+
   return child; 
 }
 
