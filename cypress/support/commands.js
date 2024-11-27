@@ -24,16 +24,114 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("login", (username, password) => {
-  cy.session(username, () => {
-    cy.visit("/");
-    cy.get("#username").type(username);
-    cy.get("#password").type(password);
-    cy.get("button").click();
-    cy.contains("Welcome").should("contain", username);
-  });
+const {log} = require("console");
+
+Cypress.Commands.add("fillUpSignIn", (username, password) => {
+  cy.get('[placeholder="Username"]').type(username);
+  cy.get('[placeholder="Password"]').type(password);
+  cy.get("button").contains("Login").click();
+})
+
+Cypress.Commands.add("loginHome", () => {
+  cy.intercept('post', '/api/login', (req) => {
+    if (req.body.username === 'home' && req.body.password === 'home') {
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: {
+            token: 'mocked-jwt-token',  // mock jwt token
+            username: 'home',
+            userType: 'homeCare',
+          },
+        },
+      });
+    } else {
+      req.reply({
+        statusCode: 401,
+        body: { message: 'unauthorized' },
+      });
+    }
+  }).as('loginHome');
+
+  cy.intercept('get', '/api/current-user', {
+    statuscode: 200,
+    body: {
+      username: 'home',
+      userType: 'homeCare',
+    },
+  }).as('getCurrentUserHome');
+
+  cy.visit("/");
+  cy.fillUpSignIn("home", "home");
+
+
+  cy.wait("@loginHome");
+  cy.wait("@getCurrentUserHome");
+
+  // Store the token to simmulate current session
+  sessionStorage.setItem('token', 'mocked-jwt-token');
+  sessionStorage.setItem('fromLogin', 'true');
+
+  cy.url().should("include", "/overview");
+});
+
+Cypress.Commands.add("loginComm", () => {
+  cy.session("comm", () => {
+    cy.get('[placeholder="Username"]').type("comm");
+    cy.get('[placeholder="Password"]').type("comm");
+    cy.intercept("/api/login", (req) => {
+      req.reply({
+        username: "comm",
+        password: "comm",
+        userType: "community",
+      });
+    });
+
+    cy.contains("Welcome").should("contain", "comm");
+  }).as("loginComm");
+});
+
+Cypress.Commands.add("loginSuper", () => {
+
+  cy.intercept('post', '/api/login', (req) => {
+    if (req.body.username === 'super' && req.body.password === 'super') {
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: {
+            token: 'mocked-jwt-token',  // mock jwt token
+            username: 'super',
+            userType: 'superUser',
+          },
+        },
+      });
+    } else {
+      req.reply({
+        statusCode: 401,
+        body: { message: 'unauthorized' },
+      });
+    }
+  }).as('loginSuper');
+
+  cy.intercept('get', '/api/current-user', {
+    statuscode: 200,
+    body: {
+      username: 'super',
+      userType: 'superUser',
+    },
+  }).as('getCurrentSuperUser');
+
+  cy.visit("/");
+  cy.fillUpSignIn("super", "super");
+
+  cy.wait("@loginSuper");
+  cy.wait("@getCurrentSuperUser");
+
+  // Store the token to simmulate current session
+  sessionStorage.setItem('token', 'mocked-jwt-token');
+  sessionStorage.setItem('fromLogin', 'true');
 });
 
 Cypress.Commands.add("logout", () => {
-  cy.get('a[href="/logout"]').click();
+  cy.contains("logout").click();
 });
