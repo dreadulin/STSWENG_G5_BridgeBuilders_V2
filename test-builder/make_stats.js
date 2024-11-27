@@ -1,5 +1,8 @@
 import randomInteger from "random-int";
-import { generateRangeOfYearFromToday, randomStr, chooseFromArray } from "./util.js"
+import { generateRangeOfYear, randomStr, chooseFromArray } from "./util.js"
+import dotenv from "dotenv";
+
+dotenv.config()
 
 function generateLabels(num) {
   const collectionOfLabels = [];
@@ -21,8 +24,8 @@ export function makeStats(num, numOfLabels) {
   const collectionOfStats = [];
 
   while (num > 0) {
-    const rangeOfYear = generateRangeOfYearFromToday;
-    const todayYear = chooseFromArray(rangeOfYear(0, 3));
+    const rangeOfYear = generateRangeOfYear;
+    const todayYear = chooseFromArray(rangeOfYear(parseInt(process.env.OLDEST_YEAR)));
 
     const stat = {
       year: todayYear,
@@ -41,4 +44,23 @@ export function makeStats(num, numOfLabels) {
   return collectionOfStats;
 }
 
+/**
+ * makeOneStat.
+ * Make one stat data, given the year and the number of labels
+ *
+ * @param {number} yearParam - child's year admitted
+ * @param {number} numOfLabels - number of labels
+ */
+export function makeOneStat(yearParam, numOfLabels) {
+  const stat = {
+    year: yearParam,
+    goals: {
+      General: generateLabels(numOfLabels),
+      Goal1: generateLabels(numOfLabels),
+      Goal2: generateLabels(numOfLabels),
+      Goal3: generateLabels(numOfLabels),
+    }
+  }
 
+  return stat;
+}

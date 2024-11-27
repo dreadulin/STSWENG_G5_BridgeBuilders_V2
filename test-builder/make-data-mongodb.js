@@ -12,11 +12,21 @@ import { makeUsers } from "./make-users.js";
 import {makeFamilies} from "./make-family.js";
 const { MongoClient, ServerApiVersion } = mongoPkg;
 
+dotenv.config();
+// options
+const DELETE_DATA = parseInt(process.env.DELETE_DATA); // Delete data of children, families, parents, and siblings
+const NUM_LABELS = parseInt(process.env.NUM_LABELS);
+const NUM_FAMILIES = parseInt(process.env.NUM_FAMILIES);
+
 // select how many children
-const childCount = 5;
+const childCount = parseInt(process.env.CHILD_COUNT);
 const children = [];
 const parents = [];
+const fathers = [];
+const mothers = [];
 const siblings = [];
+
+const stats = [];
 
 for (let i = 0; i < childCount; i++) {
   const kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
@@ -26,24 +36,31 @@ for (let i = 0; i < childCount; i++) {
 
   const child = makeChild(firstName, lastName, kasarian);
 
-  parents.push(assignFather(child));
-  parents.push(assignMother(child));
+  const father = assignFather(child);
+  const mother = assignMother(child);
+
+  parents.push(father);
+  parents.push(mother);
+
+  fathers.push(father);
+  mothers.push(mother);
 
   const siblingArray = assignSiblings(child, children);
   siblingArray.map((value) => {
     siblings.push(value);
   });
 
+  const stat = makeOneStat(child.date.getFullYear(), NUM_LABELS);
+
+  stats.push(stat);
+
   children.push(child);
 }
-
-const stats = makeStats(5, 3);
 
 const users = await makeUsers();
 
 const families = makeFamilies(5);
 
-dotenv.config();
 
 // mongodb time
 const mongodb = new MongoClient(process.env.MONGODB_URI, {
@@ -68,15 +85,38 @@ const siblingCollection = localDb.collection("siblings");
 const statsCollection = localDb.collection("stats");
 const usersCollection = localDb.collection("users");
 const familyCollection = localDb.collection("families");
+const fatherCollection = localDb.collection("fathers");
+const motherCollection = localDb.collection("mothers");
 
 console.log("Database name:", localDb.databaseName);
 
 try {
+  if (DELETE_DATA) {
+    await Promise.all([
+      childCollection.deleteMany({}),
+      parentCollection.deleteMany({}),
+      siblingCollection.deleteMany({}),
+      statsCollection.deleteMany({}),
+      usersCollection.deleteMany({}),
+      familyCollection.deleteMany({}),
+      fatherCollection.deleteMany({}),
+      motherCollection.deleteMany({}),
+      childCollection.deleteMany({})
+    ])
+  }
+  console.log("Deleted data of children, family, parents and siblings")
+
   console.log("Inserting child collection data...");
   await childCollection.insertMany(children);
 
   console.log("Inserting parent collection data...");
   await parentCollection.insertMany(parents);
+
+  console.log("Inserting father collection data...");
+  await fatherCollection.insertMany(fathers);
+
+  console.log("Inserting mother collection data...");
+  await motherCollection.insertMany(mothers);
 
   console.log("Inserting sibling collection data...");
   await siblingCollection.insertMany(siblings);
