@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node make-data.js",
-    "build:mongoose": "node make-data-mongoose.js"
+    "build": "node make-data-mongoose.js",
+    "build:mongodb": "node make-data.js"
   },
   "keywords": [],
   "author": "",
