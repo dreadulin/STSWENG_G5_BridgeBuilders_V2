@@ -48,11 +48,14 @@ for (let i = 0; i < childCount; i++) {
   const child = makeChild(firstName, lastName, kasarian);
   child.caseNo = 10 + i;
 
-  parents.push(assignFather(child));
-  parents.push(assignMother(child));
+  const father = assignFather(child);
+  const mother = assignMother(child);
 
-  fathers.push(assignFather(child));
-  mothers.push(assignMother(child));
+  parents.push(father);
+  parents.push(mother);
+
+  fathers.push(father);
+  mothers.push(mother);
 
   const siblingArray = assignSiblings(child, children);
   siblingArray.map((value) => {
@@ -105,6 +108,7 @@ try {
     ]);
   }
   console.log("Deleted data of children, family, parents and siblings")
+
   console.log("Inserting child collection data...");
   await childModel.insertMany(children);
 
