@@ -93,16 +93,18 @@ console.log("Database name:", localDb.databaseName);
 try {
   if (DELETE_DATA) {
     await Promise.all([
-      Child.deleteMany({}),
-      Parent.deleteMany({}),
-      Father.deleteMany({}),
-      Mother.deleteMany({}),
-      Family.deleteMany({}),
-      Sibling.deleteMany({}),
-      Stats.deleteMany({}),
-      User.deleteMany({}),
-    ]);
+      childCollection.deleteMany({}),
+      parentCollection.deleteMany({}),
+      siblingCollection.deleteMany({}),
+      statsCollection.deleteMany({}),
+      usersCollection.deleteMany({}),
+      familyCollection.deleteMany({}),
+      fatherCollection.deleteMany({}),
+      motherCollection.deleteMany({}),
+      childCollection.deleteMany({})
+    ])
   }
+  console.log("Deleted data of children, family, parents and siblings")
 
   console.log("Inserting child collection data...");
   await childCollection.insertMany(children);
