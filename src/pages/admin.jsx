@@ -23,7 +23,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/api/accounts');
+        const response = await axios.get('/api/accounts');
         console.log('Fetched accounts:', response.data);
         if (Array.isArray(response.data)) {
           setAccounts(response.data);
@@ -50,7 +50,7 @@ const Admin = () => {
     }
 
     try {
-      await axios.post('http://localhost:3002/api/reset-password', {
+      await axios.post('/api/reset-password', {
         username: selectedAccount.username,
         newPassword,
       });
@@ -59,7 +59,7 @@ const Admin = () => {
       setIsResetModalOpen(false);
       setNewPassword("");
       setSelectedAccount(null);
-      const response = await axios.get('http://localhost:3002/api/accounts');
+      const response = await axios.get('/api/accounts');
       if (Array.isArray(response.data)) {
         setAccounts(response.data);
       } else {
@@ -89,7 +89,7 @@ const Admin = () => {
     formData.append("backgroundImage", file);
   
     try {
-      const response = await axios.post('http://localhost:3002/api/upload-background', formData, {
+      const response = await axios.post('/api/upload-background', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

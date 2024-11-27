@@ -44,7 +44,7 @@ const ChildSchema = new mongoose.Schema(
         //filePath: { type: String, required: true }, // path to where the file is stored
         fileType: { type: String }, // type of file (e.g., "image/png", "application/pdf")
         uploadDate: { type: Date, default: Date.now }, // date when file was uploaded
-        fileId: {type: Number}, //unique Id
+        //fileId: {type: Number}, //unique Id
         fileStatus: { type: String, default: "Active" }, // "Active" or "Deleted"
       },
     ],
