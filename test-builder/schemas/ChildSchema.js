@@ -37,13 +37,14 @@ const ChildSchema = new mongoose.Schema(
     picture: { type: String, default: "" },
     status: { type: String, default: "Active" },
     goalsAchieved: [{ type: String }],
+    subgoals: [{ type: String }],
     attachedFiles: [
       {
         fileName: { type: String, required: true }, // name of the file
         //filePath: { type: String, required: true }, // path to where the file is stored
         fileType: { type: String }, // type of file (e.g., "image/png", "application/pdf")
         uploadDate: { type: Date, default: Date.now }, // date when file was uploaded
-        fileId: {type: Number}, //unique Id
+        fileId: { type: Number }, //unique Id
         fileStatus: { type: String, default: "Active" }, // "Active" or "Deleted"
       },
     ],
