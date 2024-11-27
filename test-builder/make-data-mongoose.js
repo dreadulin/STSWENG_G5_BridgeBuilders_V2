@@ -103,11 +103,10 @@ try {
       Mother.deleteMany({}),
       Family.deleteMany({}),
       Sibling.deleteMany({}),
-      Stats.deleteMany({}),
-      User.deleteMany({}),
+      Stats.deleteMany({})
     ]);
   }
-  console.log("Deleted data of children, family, parents and siblings")
+  console.log("Deleted data of children, family, parents, siblings, and User")
 
   console.log("Inserting child collection data...");
   await childModel.insertMany(children);
