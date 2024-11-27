@@ -11,7 +11,7 @@ import { useState } from "react";
 
 const Profile = () => {
   const { caseNo } = useParams();
-  const { profileData } = useProfile(caseNo);
+  const { profileData, setProfileData } = useProfile(caseNo);
   const fileInputRef = useRef(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
@@ -149,6 +149,20 @@ const Profile = () => {
     if(confirmArchiveFile) {
       try{
         await axios.post(`/api/archiveFile/${caseNo}/${fileId}`);
+
+        setProfileData((prevState) => {
+          const updatedFiles = prevState.attachedFiles.filter(
+            (file) => file._id !== fileId 
+          );
+          
+          return {
+            ...prevState,
+            attachedFiles: updatedFiles, 
+          };
+        });
+
+      console.log("File archived successfully");
+        
       } catch (error) {
         console.error("Error archiving file: ", error);
       }
@@ -348,7 +362,7 @@ const Profile = () => {
                     <div className="ml-auto flex items-center space-x-2">
                     {/* Archive Button */}
                     <button
-                        onClick={() => handleArchiveFile(file.caseNo, file._id)} 
+                        onClick={() => handleArchiveFile(caseNo, file._id)} 
                         className="text-blue-600 hover:underline px-2 py-1 border border-blue-600 rounded-lg"
                       >
                         Archive

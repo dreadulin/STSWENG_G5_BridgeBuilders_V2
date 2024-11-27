@@ -232,6 +232,7 @@ const Archive = () => {
       try {
         await axios.post(`/api/archiveFile/${caseNo}/${fileId}`);
         console.log("File unarchived successfully");
+        fetchFiles(filters); 
       } catch (error) {
         console.error("Error unarchiving file: ", error);
       }
