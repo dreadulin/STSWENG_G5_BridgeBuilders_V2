@@ -34,6 +34,10 @@ NUM_FAMILIES = # Number of families
 OLDEST_YEAR = # For generating range of years from OLDEST_YEAR to current year
                    # e.g. [2021, 2022, 2023, 2024]
                    # This is for child.date and stat.date
+
+POPULATE_GOALS = 1    # Set 1 to populate the goals. 0 to not populate them otherwise
+POPULATE_SUBGOALS = 1 # Set 1 to populate the subgoals. 0 to not populate them otherwise
+POPULATE_FILES = 0    # Set 1 to populate the files. 0 to not populate them otherwise
 ```
 
 ## Change the number of children
