@@ -44,6 +44,13 @@ export function makeStats(num, numOfLabels) {
   return collectionOfStats;
 }
 
+/**
+ * makeOneStat.
+ * Make one stat data, given the year and the number of labels
+ *
+ * @param {number} yearParam - child's year admitted
+ * @param {number} numOfLabels - number of labels
+ */
 export function makeOneStat(yearParam, numOfLabels) {
   const stat = {
     year: yearParam,
