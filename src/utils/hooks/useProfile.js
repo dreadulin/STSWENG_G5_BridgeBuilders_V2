@@ -13,6 +13,7 @@ const initialState = {
   goalsAchieved: [],
   subgoals: [],
   attachedFiles: [],
+  status: "",
 };
 
 const useProfile = (username) => {
@@ -42,6 +43,7 @@ const useProfile = (username) => {
             goalsAchieved: res.data.goalsAchieved,
             subgoals: res.data.subgoals,
             attachedFiles: res.data.attachedFiles,
+            status: res.data.status,
           });
         }
       } catch (err) {
