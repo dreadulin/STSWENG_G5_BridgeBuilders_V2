@@ -229,16 +229,10 @@ export function makeChild(firstName, lastName, kasarian) {
   child.yearAdmitted = child.date.getFullYear();
 
   child.status = chooseFromArray(["Active", "Inactive"]);
-  child.goalsAchieved = ["Goal1", "Goal2", "Goal3"]; // : [{ type: String }],
-  child.subgoals = ["Subgoal1", "Subgoal2", "Subgoal3"];
+  child.goalsAchieved = []; // : [{ type: String }],
+  child.subgoals = [];
 
-  child.attachedFiles = [
-    new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
-    new File(randomStr(), randomStr(), 1, chooseFromArray(statuses)),
-    new File(randomStr(), randomStr(), 2, chooseFromArray(statuses)),
-    new File(randomStr(), randomStr(), 3, chooseFromArray(statuses)),
-    new File(randomStr(), randomStr(), 4, chooseFromArray(statuses)),
-  ];
+  child.attachedFiles = [];
 
   return child;
 }
