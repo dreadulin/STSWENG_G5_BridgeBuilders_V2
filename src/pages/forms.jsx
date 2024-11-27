@@ -383,12 +383,12 @@ const Forms = () => {
     handleStatusOpen("Saving...", "info");
     childSchema
       .validate(childData, { abortEarly: false })
-      .then(() => {
-        const submitChildSuccess = handleSubmitChildInformation();
-        const submitMotherSuccess = handleSubmitMotherInformation();
-        const submitFatherSuccess = handleSubmitFatherInformation();
-        const submitKapatiduccess = handleSubmitKapatidInformation();
-        const submitFamilyInfoSuccess = handleSubmitFamilyInformation();
+      .then(async () => {
+        const submitChildSuccess = await handleSubmitChildInformation();
+        const submitMotherSuccess = await handleSubmitMotherInformation();
+        const submitFatherSuccess = await handleSubmitFatherInformation();
+        const submitKapatiduccess = await handleSubmitKapatidInformation();
+        const submitFamilyInfoSuccess = await handleSubmitFamilyInformation();
         if (
           submitChildSuccess &&
           submitMotherSuccess &&
