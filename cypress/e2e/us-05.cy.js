@@ -1,4 +1,4 @@
-describe("User Story# 4", () => {
+describe("User Story# 5", () => {
   beforeEach(() => {
     cy.intercept("/api/years", {body: [2024]})
     cy.intercept("/api/overview*&year=2024*").as("overview");
@@ -6,8 +6,15 @@ describe("User Story# 4", () => {
 
   })
   it("Verify if the user can view children's archived files", () => {
+
     cy.loginHome();
-    cy.get("[href='/archive']").click();
+
+    cy.contains("2024").click();
+    cy.wait("@overview");
+
+    cy.get("hr").eq(1).next().next().children().first().click();
+    cy.url().should('contain', 'profile');
+
   });
 
   /*
