@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node make-data-mongoose.js",
-    "build:mongodb": "node make-data.js"
+    "build:mongodb": "node make-data-mongodb.js"
   },
   "keywords": [],
   "author": "",
