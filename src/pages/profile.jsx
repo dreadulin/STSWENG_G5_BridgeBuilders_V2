@@ -5,6 +5,7 @@ import useProfile from "@/utils/hooks/useProfile";
 import { useParams } from "react-router-dom";
 import axios from "../axiosInstance.js";
 import logo2 from "@/assets/logo2.png";
+import profilepicdefault from "@/assets/default-profile.jpg";
 import { jsPDF } from "jspdf";
 import { useRef } from "react"; // Import useRef for file input reference
 import { useState } from "react";
@@ -53,7 +54,7 @@ const Profile = () => {
     doc.text("Profile Information", (doc.internal.pageSize.width - titleWidth) / 2, titleYPosition);
 
     // Set profile picture URL or default
-    const profilePictureUrl = profileData.picture || "/src/assets/default-profile.jpg";
+    const profilePictureUrl = profileData.picture || profilepicdefault;
 
     // Load the profile picture
     const profileImage = new Image();
@@ -66,7 +67,7 @@ const Profile = () => {
     profileImage.onerror = () => {
         console.warn("Failed to load profile picture, using default.");
         const defaultImage = new Image();
-        defaultImage.src = "/src/assets/default-profile.jpg";
+        defaultImage.src = profilepicdefault;
         defaultImage.onload = () => {
             addContentToPDF(defaultImage);
         };
