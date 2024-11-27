@@ -229,10 +229,30 @@ export function makeChild(firstName, lastName, kasarian) {
   child.yearAdmitted = child.date.getFullYear();
 
   child.status = chooseFromArray(["Active", "Inactive"]);
-  child.goalsAchieved = []; // : [{ type: String }],
-  child.subgoals = [];
 
-  child.attachedFiles = [];
+  if (parseInt(process.env.POPULATE_GOALS)) {
+    child.goalsAchieved = ["Goal1","Goal2","Goal3"]; // : [{ type: String }],
+  } else {
+    child.goalsAchieved = []; // : [{ type: String }],
+  }
+
+  if (parseInt(process.env.POPULATE_SUBGOALS)) {
+    child.subgoals = ["Subgoal1","Subgoal2","Subgoal3"]; // : [{ type: String }],
+  } else {
+    child.subgoals = []; // : [{ type: String }],
+  }
+
+  if (parseInt(process.env.POPULATE_FILES)) {
+    child.attachedFiles = [
+      new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
+      new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
+      new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
+      new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
+      new File(randomStr(), randomStr(), 0, chooseFromArray(statuses)),
+    ];
+  } else {
+    child.attachedFiles = [];
+  }
 
   return child;
 }
