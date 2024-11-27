@@ -62,7 +62,7 @@ for (let i = 0; i < childCount; i++) {
     siblings.push(value);
   });
 
-  const stat = makeOneStat(child.date.getFullYear(), NUM_LABELS);
+  const stat = makeOneStat(child.yearAdmitted, NUM_LABELS);
 
   stats.push(stat);
 
@@ -127,16 +127,8 @@ try {
   console.log("Inserting family collection data...");
   await familyModel.insertMany(families);
 
-  const statsCount = await statsModel.estimatedDocumentCount()
-  if (statsCount) {
-    console.log("Updating stats collection data...");
-    stats.map((value) => {
-      statsModel.updateMany({}, { $set: value });
-    });
-  } else {
-    console.log("Inserting stats collection data...");
-    statsModel.insertMany(stats);
-  }
+  console.log("Inserting stats collection data...");
+  statsModel.insertMany(stats);
 
   const userCount = await usersModel.estimatedDocumentCount()
   if (userCount) {
