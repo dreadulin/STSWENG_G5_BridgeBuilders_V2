@@ -1,12 +1,20 @@
-describe("us# 4", () => {
+describe("User Story# 4", () => {
+  beforeEach(() => {
+    cy.intercept("/api/years", {body: [2024]})
+    cy.intercept("/api/overview*&year=2024*").as("overview");
+    cy.intercept("/profile/*").as("profile");
+
+  })
   it("Verify if the user can view children's archived files", () => {
     cy.loginHome();
-
+    cy.get("[href='/archive']").click();
   });
 
+  /*
   it("Verify if admin can view both home care and children’s archived files", () => {
     cy.loginSuper();
   });
+  */
 });
 
 /*
