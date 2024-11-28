@@ -26,6 +26,13 @@
 
 const {log} = require("console");
 
+Cypress.Commands.add("clickFirstChild", () => {
+  cy.get("hr").eq(1).next().next().children().first().click();
+  cy.wait("@profile");
+  cy.contains("edit").click();
+  cy.wait("@profile");
+})
+
 Cypress.Commands.add("fillUpSignIn", (username, password) => {
   cy.get('[placeholder="Username"]').type(username);
   cy.get('[placeholder="Password"]').type(password);
@@ -76,19 +83,43 @@ Cypress.Commands.add("loginHome", () => {
 });
 
 Cypress.Commands.add("loginComm", () => {
-  cy.session("comm", () => {
-    cy.get('[placeholder="Username"]').type("comm");
-    cy.get('[placeholder="Password"]').type("comm");
-    cy.intercept("/api/login", (req) => {
+  cy.intercept('post', '/api/login', (req) => {
+    if (req.body.username === 'comm' && req.body.password === 'comm') {
       req.reply({
-        username: "comm",
-        password: "comm",
-        userType: "community",
+        statusCode: 200,
+        body: {
+          data: {
+            token: 'mocked-jwt-token',  // mock jwt token
+            username: 'comm',
+            userType: 'community',
+          },
+        },
       });
-    });
+    } else {
+      req.reply({
+        statusCode: 401,
+        body: { message: 'unauthorized' },
+      });
+    }
+  }).as('loginComm');
 
-    cy.contains("Welcome").should("contain", "comm");
-  }).as("loginComm");
+  cy.intercept('get', '/api/current-user', {
+    statuscode: 200,
+    body: {
+      username: 'comm',
+      userType: 'community',
+    },
+  }).as('getCurrentComm');
+
+  cy.visit("/");
+  cy.fillUpSignIn("comm", "comm");
+
+  cy.wait("@loginComm");
+  cy.wait("@getCurrentComm");
+
+  // Store the token to simmulate current session
+  sessionStorage.setItem('token', 'mocked-jwt-token');
+  sessionStorage.setItem('fromLogin', 'true');
 });
 
 Cypress.Commands.add("loginSuper", () => {

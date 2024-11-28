@@ -178,11 +178,12 @@ const listahangRelihiyon = [
 /**
  * makeChild.
  *
+ * @param {number} year - year assigned
  * @param {string} firstName - First name of the child
  * @param {string} lastName - Last name of the child
  * @param {string} kasarian - Gender of the child
  */
-export function makeChild(firstName, lastName, kasarian) {
+export function makeChild(year, firstName, lastName, kasarian) {
   const child = new Child();
   const today = new Date();
 
@@ -193,9 +194,7 @@ export function makeChild(firstName, lastName, kasarian) {
 
   child.program = programList.at(randomInteger(1));
   child.date = new Date();
-  child.date.setFullYear(
-    chooseFromArray(generateRangeOfYear(parseInt(process.env.OLDEST_YEAR)))
-  );
+  child.date.setFullYear(year);
 
   // child.caseNo = randomInteger(); //unique id
   child.pangalan = fullName;
@@ -228,7 +227,8 @@ export function makeChild(firstName, lastName, kasarian) {
 
   child.yearAdmitted = child.date.getFullYear();
 
-  child.status = chooseFromArray(["Active", "Inactive"]);
+  // child.status = chooseFromArray(["Active", "Inactive"]);
+  child.status = "Active";
 
   if (parseInt(process.env.POPULATE_GOALS)) {
     child.goalsAchieved = ["Goal1","Goal2","Goal3"]; // : [{ type: String }],
@@ -254,5 +254,11 @@ export function makeChild(firstName, lastName, kasarian) {
     child.attachedFiles = [];
   }
 
+  return child;
+}
+
+export function makeChildProgram(programIdx, year, firstName, lastName, kasarian) {
+  const child = makeChild(year, firstName, lastName, kasarian)
+  child.program = programList[programIdx];
   return child;
 }
