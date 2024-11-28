@@ -1,9 +1,9 @@
 import resultNames from "./readFiles.js";
 
-import { makeChild } from "./make_children.js";
+import { makeChild, makeChildProgram } from "./make_children.js";
 
 import { assignFather, assignMother } from "./make-parent.js";
-import { chooseFromArray, makeFirstName, outputDocuments } from "./util.js";
+import { chooseFromArray, generateRangeOfYear as generateLowerYears, generateRangeOfYear, makeFirstName, outputDocuments } from "./util.js";
 import { makeOneStat, makeStats } from "./make_stats.js";
 import { assignSiblings } from "./make-siblings.js";
 
@@ -36,16 +36,51 @@ const parents = [];
 const fathers = [];
 const mothers = [];
 const siblings = [];
-
 const stats = [];
 
+// const years = generateLowerYears(2018);
+const years = generateRangeOfYear(2023, 2018);
+let whichYear = 0;
+let count = 0;
+let maxCount = Math.round(childCount/years.length);
+
+function generateChild(caseNo, hasGoal, hasSubgoal, programIdx, year, kasarian) {
+  const result = {}
+
+  const firstName = makeFirstName(resultNames, kasarian);
+  const lastName = resultNames.takeFamilyName();
+
+  result.child = makeChildProgram(programIdx, year, firstName, lastName, kasarian);
+  result.child.caseNo = caseNo;
+
+  result.father = assignFather(result.child);
+  result.mother = assignMother(result.child);
+  result.siblings = assignSiblings(result.child, children);
+  result.stat = makeOneStat(result.child.yearAdmitted, NUM_LABELS);
+
+  if (hasGoal) {
+    result.child.goalsAchieved = ["Goal1","Goal2","Goal3"]; // : [{ type: String }],
+  } else {
+    result.child.goalsAchieved = []; // : [{ type: String }],
+  }
+
+  if (hasSubgoal) {
+    result.child.subgoals = ["Subgoal1","Subgoal2","Subgoal3"]; // : [{ type: String }],
+  } else {
+    result.child.subgoals = []; // : [{ type: String }],
+  }
+
+  return result;
+}
+
 for (let i = 0; i < childCount; i++) {
+  whichYear = Math.min(whichYear, years.length - 1);
   const kasarian = chooseFromArray(["Lalaki", "Babae", "Other"]);
 
   const firstName = makeFirstName(resultNames, kasarian);
   const lastName = resultNames.takeFamilyName();
 
-  const child = makeChild(firstName, lastName, kasarian);
+  const child = makeChild(years[whichYear], firstName, lastName, kasarian);
   child.caseNo = 10 + i;
 
   const father = assignFather(child);
@@ -67,8 +102,47 @@ for (let i = 0; i < childCount; i++) {
   stats.push(stat);
 
   children.push(child);
+
+  if (count == maxCount) {
+    whichYear += 1;
+    count = 0;
+  }
+  count += 1;
 }
 
+const homeChild        = generateChild(555, true, false, 0, 2024, "Lalaki");
+const commChild        = generateChild(556, true, false, 1, 2024, "Babae");
+const homeSubGoalChild = generateChild(557, true, true,  0, 2024, "Lalaki");
+const commSubGoalChild = generateChild(558, true, true,  1, 2024, "Babae");
+
+children.push(homeChild.child, commChild.child,  homeSubGoalChild.child,  commSubGoalChild.child);
+fathers.push(homeChild.father, commChild.father, homeSubGoalChild.father, commSubGoalChild.father);
+mothers.push(homeChild.mother, commChild.mother, homeSubGoalChild.mother, commSubGoalChild.mother);
+
+homeChild.siblings.map(value => {
+  siblings.push(value);
+})
+
+commChild.siblings.map(value => {
+  siblings.push(value);
+})
+
+homeSubGoalChild.siblings.map(value => {
+  siblings.push(value);
+})
+
+commSubGoalChild.siblings.map(value => {
+  siblings.push(value);
+})
+
+stats.push(
+  makeOneStat(       homeChild.child.yearAdmitted, NUM_LABELS),
+  makeOneStat(       commChild.child.yearAdmitted, NUM_LABELS),
+  makeOneStat(homeSubGoalChild.child.yearAdmitted, NUM_LABELS),
+  makeOneStat(commSubGoalChild.child.yearAdmitted, NUM_LABELS)
+)
+
+console.log("children:", children);
 
 const users = await makeUsers();
 

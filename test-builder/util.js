@@ -169,7 +169,7 @@ export function generateRangeOfYearFromToday(upper, lower) {
   return rangeOfYear;
 }
 
-export function generateRangeOfYear(oldestYear) {
+export function generateLowerYears(oldestYear) {
   const today = new Date();
   const thisYear = today.getFullYear();
   const rangeOfYear = [];
@@ -181,6 +181,19 @@ export function generateRangeOfYear(oldestYear) {
 
   rangeOfYear.push(thisYear);
   console.log("rangeOfYear:", rangeOfYear)
+
+  return rangeOfYear;
+}
+
+export function generateRangeOfYear(newestYear, oldestYear) {
+  const rangeOfYear = [];
+  while (oldestYear < newestYear) {
+    rangeOfYear.push(oldestYear);
+    oldestYear += 1;
+  }
+
+  rangeOfYear.push(oldestYear);
+  console.log("(generateRangeOfYear) rangeOfYear:", rangeOfYear)
 
   return rangeOfYear;
 }
